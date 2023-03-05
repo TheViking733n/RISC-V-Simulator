@@ -1,0 +1,48 @@
+Design and implement the function simulator in c or c++ for RISCV-I32
+instructions discussed in class. Function simulator takes instruction encoding
+in MEM file as input. MEM file has the following format:
+
+#First number is address of the instruction, followed by space followed by instruction encoding. # can be used for comments. For example:
+
+0x0 0xFECF8093  
+0x4 0x00341313
+0x8 0x00AFA583
+0xC 0xFE738AE3
+
+#The above example is for the following code
+#a:
+#ADDI x1, x31, -20
+#SLLI x6, x8, 3
+#LW x11, 10(x31)
+#BEQ x7, x7, a
+
+
+All the instruction in the given in the input MEM file is executed as per the
+functional behavior of the instructions. Each instruction must go through the
+following phases:
+ - Fetch
+ - Decode
+ - Execute
+ - Memory
+ - Writeback
+
+Along with execution of instruction stages, simulator also provide messages
+what it is doing in each stage, Implements an additional instruction which
+exits the simulator, writes the data memory in MEM file before exiting.  
+
+You must test the software using two assembly programs:
+ - Fibonacci Program
+ - Sum of the array of N elements. Initialize an array in first loop with each
+   element equal to its index. In second loop find the sum of this array, and
+store the result at Arr[N].   
+ - Bubble sort implemented in lab 2
+
+
+A template implementation is attached, which contains a README file, a design
+document, Makefile, and c code to start with. In the submission you are
+supposed to submit the source code along with updated design document,  README,
+input test files.  Overall project would be evaluation on:
+ - Functional completeness
+ - Documentation completeness
+ - Testcase
+
