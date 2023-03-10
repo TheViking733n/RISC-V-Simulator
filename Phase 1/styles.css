@@ -1,3 +1,165 @@
-body {background-color: white; color: black;
-    font-family: Arial, Helvetica, sans-serif; 
-    }
+*{
+    margin: 0px;
+    padding: 0px;
+}
+header{
+    width: 100vw;
+    height: 10vh;
+    display:flex;
+    flex-wrap: wrap;
+    align-items: center;
+}
+.control-buttons{
+    /* padding: 1rem; */
+    display: flex;
+    width: 30vw;
+    justify-content: space-around;
+    align-items: center;
+}
+.control-buttons>button{
+    width: 7vw;
+    height: 30px;
+}
+content{
+    display: flex;
+    width: 100vw;
+    height: 90vh;
+    flex-wrap: wrap;
+    justify-content: space-around;
+}
+.machine-code-pane{
+    height: 90vh;
+    width: 30vw;    
+    background-color: green;
+}
+.timeline-box{
+    height: 90vh;
+    width: 30vw;
+    background-color: black;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+}
+.timeline-pane{
+    height: 80vh;
+    width: 30vw;
+    display: flex;
+    flex-wrap: wrap;
+    overflow-y: scroll;
+    /* scrollbar-color: rebeccapurple green; */
+    scrollbar-width: thin;  
+    color: white;
+}    
+.timeline-header{
+    background-color: red;
+    width: 4vw;
+    height: 10vh;
+}
+.value-displayer{
+    height: 90vh;
+    width: 40vw;
+    background-color: grey;
+}
+.switcher{
+    height: 10vh;
+    display: flex;
+    /* justify-content: space-between; */
+    flex-wrap: wrap;
+    width:40vw;
+}
+.switcher>div{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: greenyellow;
+    width:20vw;
+    background-color: blue;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@import url('https://fonts.googleapis.com/css?family=Open+Sans:400,600,700');
+.tabinator {
+  background: #fff;
+  padding: 40px;
+  font-family: Open Sans;
+}
+.tabinator h2 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+.tabinator input {
+  display: none;
+}
+.tabinator label {
+  box-sizing: border-box;
+  display: inline-block;
+  padding: 15px 25px;
+  color: #ccc;
+  margin-bottom: -1px;
+  margin-left: -1px;
+}
+.tabinator label:before {
+  content:'';
+  display:block;
+  width:100%;
+  height:15px;
+  background-color:#fff;
+  position:absolute;
+  bottom:-11px;
+  left:0;
+  z-index:10;  
+}
+.tabinator label:hover {
+  color: #888;
+  cursor: pointer;
+}
+.tabinator input:checked + label {
+  position: relative;
+  color: #000;
+  background: #fff;
+  border: 1px solid #bbb;
+  border-bottom: 1px solid #fff;
+  border-radius: 5px 5px 0 0;
+}
+.tabinator input:checked + label:after {
+  display: block;
+  content: '';
+  position: absolute;
+  top: 0; right: 0; bottom: 0; left: 0;
+  box-shadow: 0 0 15px #939393;
+}
+#content1, #content2, #content3, #content4 {
+  display: none;
+  border-top: 1px solid #bbb;
+  padding: 15px;
+}
+#tab1:checked ~ #content1,
+#tab2:checked ~ #content2,
+#tab3:checked ~ #content3,
+#tab4:checked ~ #content4 {
+  display: block;
+  box-shadow: 0 0 15px #939393;
+}
