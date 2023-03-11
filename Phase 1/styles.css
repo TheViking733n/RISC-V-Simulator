@@ -2,109 +2,122 @@
     margin: 0px;
     padding: 0px;
 }
+
+.scrollable {
+  overflow-y: scroll;
+  /* scrollbar-color: rebeccapurple green; */
+  scrollbar-width: thin;  
+  color: white;
+}
+
 header{
-    width: 100vw;
-    height: 10vh;
+    width: 90vw;
+    height: 12vh;
     display:flex;
     flex-wrap: wrap;
     align-items: center;
 }
 .control-buttons{
-    /* padding: 1rem; */
-    display: flex;
-    width: 30vw;
-    justify-content: space-around;
-    align-items: center;
+  /* padding: 1rem; */
+  display: flex;
+  width: 30vw;
+  justify-content: space-around;
+  align-items: center;
 }
 .control-buttons>button{
-    width: 7vw;
-    height: 30px;
+  width: 7vw;
+  height: 30px;
 }
 content{
-    display: flex;
-    width: 100vw;
-    height: 90vh;
-    flex-wrap: wrap;
-    justify-content: space-around;
+  display: flex;
+  width: 98vw;
+  height: 85vh;
+  flex-wrap: wrap;
+  justify-content: space-around;
 }
-.machine-code-pane{
-    height: 90vh;
-    width: 30vw;    
-    background-color: green;
+.instructions-pane{
+  height: 100%;
+  width: 38vw;    
+  /* background-color: green; */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.instructions {
+  width: 80%;
+  height: 80%;
+  background-color: red;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+.timeline-pane{
+  height: 100%;
+  width: 30vw;
+  /* background-color: purple; */
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 .timeline-box{
-    height: 90vh;
-    width: 30vw;
-    background-color: black;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-around;
-}
-.timeline-pane{
-    height: 80vh;
-    width: 30vw;
-    display: flex;
-    flex-wrap: wrap;
-    overflow-y: scroll;
-    /* scrollbar-color: rebeccapurple green; */
-    scrollbar-width: thin;  
-    color: white;
+  width: 24rem;
+  height: 80%;
+  background-color: blue;
+  border: 2px solid black;
 }    
-.timeline-header{
-    background-color: red;
-    width: 4vw;
-    height: 10vh;
+.timeline-header-box{
+  height: 10%;
+  width: 100%;
+  background-color: red;
+  display: flex;
+  justify-content: left;
 }
-.value-displayer{
-    height: 90vh;
-    width: 40vw;
-    background-color: grey;
+.timeline-header {
+  width: 4rem;
+  height: 100%;
+  background-color: orange;
+  border: 2px solid black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.5rem;
+  z-index: 1;
 }
-.switcher{
-    height: 10vh;
-    display: flex;
-    /* justify-content: space-between; */
-    flex-wrap: wrap;
-    width:40vw;
+.timeline {
+  width: 25rem;
+  height: 90%;
+  /* background-color: green; */
+  display: flex;
+  justify-content: left;
 }
-.switcher>div{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: greenyellow;
-    width:20vw;
-    background-color: blue;
+.timeline-col {
+  width: 4rem;
+  min-height: 100%;
+  background-color: yellow;
+  border: 2px solid black;
+}
+.memory-pane{
+  height: 100%;
+  width: 30vw;
+  /* background-color: grey; */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.memory-box{
+  height: 90%;
+  width: 90%;
+  /* background-color: red; */
 }
 
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-@import url('https://fonts.googleapis.com/css?family=Open+Sans:400,600,700');
 .tabinator {
   background: #fff;
   padding: 40px;
-  font-family: Open Sans;
 }
 .tabinator h2 {
   text-align: center;
@@ -151,15 +164,33 @@ content{
   top: 0; right: 0; bottom: 0; left: 0;
   box-shadow: 0 0 15px #939393;
 }
-#content1, #content2, #content3, #content4 {
+#register, #memory {
   display: none;
   border-top: 1px solid #bbb;
   padding: 15px;
+  width: 23vw;
+  height: 50vh;
 }
-#tab1:checked ~ #content1,
-#tab2:checked ~ #content2,
-#tab3:checked ~ #content3,
-#tab4:checked ~ #content4 {
+#register-tab:checked ~ #register,
+#memory-tab:checked ~ #memory {
   display: block;
   box-shadow: 0 0 15px #939393;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
