@@ -3,6 +3,10 @@
     padding: 0px;
 }
 
+body {
+  overflow: hidden;
+}
+
 .scrollable {
   overflow-y: scroll;
   /* scrollbar-color: rebeccapurple green; */
@@ -39,7 +43,7 @@ content{
 }
 .instructions-pane{
   height: 100%;
-  width: 20vw;    
+  width: 37vw;    
   /* background-color: green; */
   display: flex;
   align-items: center;
@@ -97,11 +101,10 @@ content{
 .timeline-col {
   width: 4rem;
   min-height: 100%;
+  height: 100vh;
   background-color: yellow;
   border: 2px solid black;
 }
-
-
 .memory-pane{
   height: 100%;
   width: 30vw;
@@ -111,26 +114,29 @@ content{
   justify-content: center;
 }
 .memory-box{
-  height: 90%;
+  height: 95%;
   width: 90%;
   /* background-color: red; */
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
-
-
-
-
 .tabinator {
   background: #fff;
-  padding: 40px;
+  padding: 0px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
 }
 .tabinator h2 {
   text-align: center;
   margin-bottom: 20px;
 }
-.tabinator input {
+.tabs-header input {
   display: none;
 }
-.tabinator label {
+.tabs-header label {
   box-sizing: border-box;
   display: inline-block;
   padding: 15px 25px;
@@ -138,7 +144,7 @@ content{
   margin-bottom: -1px;
   margin-left: -1px;
 }
-.tabinator label:before {
+.tabs-header label:before {
   content:'';
   display:block;
   width:100%;
@@ -149,11 +155,11 @@ content{
   left:0;
   z-index:10;  
 }
-.tabinator label:hover {
+.tabs-header label:hover {
   color: #888;
   cursor: pointer;
 }
-.tabinator input:checked + label {
+.tabs-header input:checked + label {
   position: relative;
   color: #000;
   background: #fff;
@@ -161,7 +167,7 @@ content{
   border-bottom: 1px solid #fff;
   border-radius: 5px 5px 0 0;
 }
-.tabinator input:checked + label:after {
+.tabs-header input:checked + label:after {
   display: block;
   content: '';
   position: absolute;
@@ -173,7 +179,7 @@ content{
   border-top: 1px solid #bbb;
   padding: 15px;
   width: 23vw;
-  height: 50vh;
+  height: 58vh;
 }
 #register-tab:checked ~ #register,
 #memory-tab:checked ~ #memory {
