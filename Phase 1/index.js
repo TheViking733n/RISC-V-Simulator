@@ -28,7 +28,16 @@ class Simulator {
     }
 
     memoryAccess() {
+        let memoryStack = {}
 
+        if(this.OP === 'store'){
+
+        }
+        else if(this.OP === 'load'){
+            let address = memoryStack.ALURESULT;
+            register[instruction.RD]
+
+}
     }
 
     writeBack() {
