@@ -197,17 +197,17 @@ class Simulator {
             let hexNum = '';
             switch(this.OP[1]){
                 case 'w':
-                    hexNum += this.MEMORY[address+3]===undefined?0:this.MEMORY[address+3]  + this.MEMORY[address+2]===undefined?0:this.MEMORY[address+2];
+                    hexNum += this.MEMORY[address+3]===undefined?'00':this.MEMORY[address+3]  + this.MEMORY[address+2]===undefined?'00':this.MEMORY[address+2];
                 case 'h':
-                    hexNum += this.MEMORY[address+1]===undefined?0:this.MEMORY[address+1];
+                    hexNum += this.MEMORY[address+1]===undefined?'00':this.MEMORY[address+1];
                 default:
-                    hexNum += this.MEMORY[address]===undefined?0:this.MEMORY[address];
+                    hexNum += this.MEMORY[address]===undefined?'00':this.MEMORY[address];
             }
             this.ALURESULT = parseInt(hexNum, 16);
         }
     }
 
     writeBack() {
-
+        this.RD = this.ALURESULT;
     }
 }
