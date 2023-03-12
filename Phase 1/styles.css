@@ -34,6 +34,7 @@ header{
   width: 7vw;
   height: 30px;
 }
+
 content{
   display: flex;
   width: 98vw;
@@ -41,37 +42,72 @@ content{
   flex-wrap: wrap;
   justify-content: space-around;
 }
+
+
 .instructions-pane{
   height: 100%;
   width: 37vw;    
   /* background-color: green; */
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: top;
   flex-direction: column;
 }
 
 .instructions {
   width: 80%;
   height: 80%;
-  background-color: red;
+  /* background-color: red; */
   margin-top: 1rem;
   margin-bottom: 1rem;
   overflow-x: hidden;
+  border: 2px solid black;
 }
-.instruction {
+.instruction-row {
   width: 100%;
-  height: 4rem;
-  background-color: blue;
-  border: 1px solid black;
+  height: 3rem;
+  /* background-color: blue; */
+  /* border: 1px solid black; */
+  display: flex;
 }
+
+.instruction-addr, .instruction-hex, .instruction-decoded {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  border: 1px solid black;
+  color: black;
+}
+
+.instruction-addr {
+  width: 25%;
+  height: 100%;
+  /* background-color: lightblue; */
+}
+.instruction-hex {
+  width: 25%;
+  height: 100%;
+  /* background-color: pink; */
+}
+.instruction-decoded {
+  width: 50%;
+  height: 100%;
+  /* background-color: purple; */
+}
+.instruction-col-heading {
+  background-color: yellowgreen;
+  font-weight: bold;
+}
+
+
 
 .timeline-pane{
   height: 100%;
   width: 30vw;
   /* background-color: purple; */
   display: flex;
-  justify-content: center;
+  justify-content: top;
   align-items: center;
   flex-direction: column;
 }
@@ -141,19 +177,24 @@ content{
 
 
 
+
+
+
+
 .memory-pane{
   height: 100%;
   width: 30vw;
   /* background-color: grey; */
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: top;
+  flex-direction: column;
 }
 .timeline-pane h2 {
   margin-bottom: 1rem;
 }
 .memory-box{
-  height: 95%;
+  height: 80%;
   width: 90%;
   /* background-color: red; */
   display: flex;
@@ -218,7 +259,7 @@ content{
   border-top: 1px solid #bbb;
   padding: 15px;
   width: 23vw;
-  height: 58vh;
+  height: 50vh;
 }
 #register-tab:checked ~ #register,
 #memory-tab:checked ~ #memory {
@@ -226,9 +267,81 @@ content{
   box-shadow: 0 0 15px #939393;
 }
 
+.register-container {
+  width: 100%;
+  height: 100%;
+  /* background-color: lightgray; */
+}
 
+.memory-container {
+  width: 100%;
+  height: 100%;
+  /* background-color: pink; */
+}
 
+.register-row, .memory-row{
+  width: 98%;
+  height: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  /* background-color: lightgreen; */
+  border: 1px solid black;
+}
+.register-name, .register-value, .memory-address, .memory-value, .memory-cell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  color: black;
+  border: 1px solid black;
+}
 
+.register-name {
+  width: 30%;
+  height: 100%;
+  /* background-color: red; */
+}
+.register-value {
+  width: 70%;
+  height: 100%;
+  /* background-color: lightgreen; */
+}
+.register-col-heading {
+  background-color: pink;
+  font-weight: bold;
+}
+
+.memory-address {
+  width: 40%;
+  height: 100%;
+  /* background-color: red; */
+}
+.memory-value {
+  width: 60%;
+  height: 100%;
+  /* background-color: blue; */
+  display: flex;
+}
+.memory-cell {
+  width: 25%;
+  height: 100%;
+  /* background-color: yellow; */
+  border: 1px solid black;
+}
+.memory-col-heading {
+  background-color: pink;
+  font-weight: bold;
+}
+
+.base-switcher {
+  width: 100%;
+  height: 10%;
+  /* background-color: lightblue; */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 
 
 

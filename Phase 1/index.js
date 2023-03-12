@@ -40,7 +40,44 @@ class Simulator {
         this.RD = 0;        // 0 to 31 for each register
         this.IMM = 0;       // Stores immediate value
         this.ALURESULT = 0; // Stores result of ALU or Memory value
-        this.MEMORY = {}
+        this.MEMORY = {};
+
+        // Now creating Instruction div elements
+        for (let i = 0; i <= 50; i++) {
+            let instructionDiv = document.createElement("div");
+            instructionDiv.className = "instruction-row";
+            instructionDiv.innerHTML = `<div class="instruction-addr">Addr: ${i}</div>
+            <div class="instruction-hex">Hex: ${i}</div>
+            <div class="instruction-decoded">Decoded: ${i}</div>`;
+            document.getElementsByClassName("instructions")[0].appendChild(instructionDiv);
+        }
+
+        // Now creating Timeline div elements
+
+
+        // Now creating register div elements
+        for (let i = 0; i < 32; i++) {
+          let registerDiv = document.createElement("div");
+          registerDiv.className = "register-row";
+          registerDiv.innerHTML = `<div class="register-name">x${i}</div>
+          <div class="register-value">${this.RF[i]}</div>`;
+          document.getElementById("register").getElementsByClassName("register-container")[0].appendChild(registerDiv);
+        }
+
+        // Now creating memory div elements
+        for (let i = 0; i < 10; i++) {
+          let memoryDiv = document.createElement("div");
+          memoryDiv.className = "memory-row";
+          memoryDiv.id = `memory-row-${i}`;
+          memoryDiv.innerHTML = `<div class="memory-address"></div>
+          <div class="memory-value">
+              <div class="memory-cell"></div>
+              <div class="memory-cell"></div>
+              <div class="memory-cell"></div>
+              <div class="memory-cell"></div>
+          </div>`;
+          document.getElementById("memory").getElementsByClassName("memory-container")[0].appendChild(memoryDiv);
+        }
     }
 
     fetch() {
@@ -813,5 +850,7 @@ class Simulator {
 
     writeBack() {
       if(Number(this.RD) !== 0) this.RF[this.RD] = this.ALURESULT;
-    }
+    }     
 }
+
+var simulator = new Simulator();

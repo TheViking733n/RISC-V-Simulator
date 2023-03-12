@@ -17,40 +17,19 @@
     </header>
     <content>
         <div class="instructions-pane">
-            <h2>
-                Instructions
-            </h2>
+            <h2>Instructions</h2>
 
             <div class="instructions scrollable">
-                <div class="instruction"></div>
-                <div class="instruction"></div>
-                <div class="instruction"></div>
-                <div class="instruction"></div>
-                <div class="instruction"></div>
-                <div class="instruction"></div>
-                <div class="instruction"></div>
-                <div class="instruction"></div>
-                <div class="instruction"></div>
-                <div class="instruction"></div>
-                <div class="instruction"></div>
-                <div class="instruction"></div>
-                <div class="instruction"></div>
-                <div class="instruction"></div>
-                <div class="instruction"></div>
-                <div class="instruction"></div>
-                <div class="instruction"></div>
-                <div class="instruction"></div>
-                <div class="instruction"></div>
-                <div class="instruction"></div>
+                <div class="instruction-row instruction-col-heading">
+                    <div class="instruction-addr">Address</div>
+                    <div class="instruction-hex">Hex</div>
+                    <div class="instruction-decoded">Decoded</div>
+                </div>
             </div>
 
             <div class="instructions-cycle-wrapper">
-                <span>
-                    Cycles:
-                </span>
-                <span class="cycle-count">
-                    0
-                </span>
+                <span>Cycles:</span>
+                <span class="cycle-count">0</span>
             </div>
 
         </div>
@@ -80,24 +59,46 @@
         </div>
 
         <div class="memory-pane">
+            <h2>Memory View</h2>
             <div class="memory-box">
                 <div class="tabinator">
-                    <h2>Memory View</h2>
                     <div class="tabs-header">
                         <input type="radio" id="register-tab" name="tabs" checked>
                         <label for="register-tab">Register</label>
                         <input type="radio" id="memory-tab" name="tabs">
                         <label for="memory-tab">Memory</label>
                         <div id="register">
-                          <p>Register tab content
-                          </p>
+                          <div class="register-container scrollable">
+                            <div class="register-row register-col-heading">
+                                <div class="register-name">Register</div>
+                                <div class="register-value">Value</div>
+                            </div>
+                          </div>
                         </div>
                         <div id="memory">
-                          <p>Memory tab content
-                          </p>
+                          <div class="memory-container scrollable">
+                            <div class="memory-row">
+                                <div class="memory-address memory-col-heading">Address</div>
+                                <div class="memory-value">
+                                    <div class="memory-cell memory-col-heading">+0</div>
+                                    <div class="memory-cell memory-col-heading">+1</div>
+                                    <div class="memory-cell memory-col-heading">+2</div>
+                                    <div class="memory-cell memory-col-heading">+3</div>
+                                </div>
+                            </div>
+                          </div>
                         </div>
                     </div>
                   </div>
+            </div>
+            <div class="base-switcher">
+                <label for="base">Base:</label>
+                <select name="base" id="base">
+                    <option value="decimal">Decimal</option>
+                    <option value="hexadecimal">Hexadecimal</option>
+                    <option value="binary">Binary</option>
+                    <option value="octal">Octal</option>
+                </select>
             </div>
         </div>
             
