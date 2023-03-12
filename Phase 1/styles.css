@@ -78,7 +78,7 @@ content{
 .timeline-box{
   width: 24rem;
   height: 80%;
-  background-color: blue;
+  /* background-color: blue; */
   border: 2px solid black;
 }    
 .timeline-header-box{
@@ -108,11 +108,39 @@ content{
 }
 .timeline-col {
   width: 4rem;
-  min-height: 100%;
-  height: 100vh;
-  background-color: yellow;
-  border: 2px solid black;
+  /* min-height: 100%; */
+  /* height: auto; */
+  /* background-color: yellow; */
+  border-top: 2px solid black;
+  border-left: 2px solid black;
+  border-right: 2px solid black;
+  display: flex;
+  justify-content: top;
+  align-items: center;
+  flex-direction: column;
 }
+.timeline-cell {
+  width: 100%;
+  height: 4rem;
+  /* background-color: green; */
+  border: 2px solid black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row;
+  font-size: 2rem;
+  color: black;
+}
+.stall {
+  width: 2rem;
+  height: 2rem;
+  margin: 1px;
+  border: 2px solid black;
+  border-radius: 50%;
+}
+
+
+
 .memory-pane{
   height: 100%;
   width: 30vw;
