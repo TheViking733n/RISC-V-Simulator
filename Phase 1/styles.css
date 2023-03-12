@@ -73,6 +73,7 @@ content{
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-direction: column;
 }
 .timeline-box{
   width: 24rem;
@@ -119,6 +120,9 @@ content{
   display: flex;
   align-items: center;
   justify-content: center;
+}
+.timeline-pane h2 {
+  margin-bottom: 1rem;
 }
 .memory-box{
   height: 95%;
