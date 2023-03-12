@@ -69,6 +69,6 @@ class Simulator {
     }
 
     writeBack() {
-
+        this.RD = this.ALURESULT;
     }
 }
