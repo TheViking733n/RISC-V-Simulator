@@ -1,3 +1,24 @@
+function RFSync(rf, format){
+  switch(format){
+    case 'hex':
+      document.querySelector(".dropbtn").textContent = 'Hexadecimal';
+      break;
+    case 'dec':
+      document.querySelector(".dropbtn").textContent = 'Decimal';
+      break;
+    case 'udec':
+      document.querySelector(".dropbtn").textContent = 'Unsigned Decimal';
+  }
+  // document.querySelector(".dropbtn").textContent=(format[0]==='h'?'Hexad':format[0]==='u'?'Unsigned D':'D')+'ecimal';
+  let registerFile = document.querySelectorAll(".register-value");
+  for(let i = 1; i<registerFile.length; i++){
+    let value = rf[i-1];
+    if(format === 'hex') value = value.toString(16);
+    else if(format === 'dec') value &= 0xffffffff;
+    registerFile[i].textContent = `${(format==='hex'?'0x':'')}${value}`;
+  }
+}
+
 function timelineAppendRow(cycle, row) {
     // cycle is value of current cycle number
     // row is an array of size 5 containing 5 numbers which represent the instruction number being executed
@@ -9,23 +30,32 @@ function timelineAppendRow(cycle, row) {
 
     let timelineHeaderId = ["fetch", "decode", "execute", "memoryaccess", "writeback"];
     for (let i = 0; i < row.length; i++) {
-        let instructionDiv = document.createElement("div");
-        instructionDiv.className = "timeline-cell";
+        let timelineCellDiv = document.createElement("div");
+        timelineCellDiv.className = "timeline-cell";
         if (row[i] != 0) {
-            instructionDiv.innerHTML = row[i];
+            timelineCellDiv.innerHTML = row[i];
         } else {
             // let stallDiv = document.createElement("div");
             // stallDiv.className = "stall";
-            // instructionDiv.appendChild(stallDiv);
-            instructionDiv.innerHTML = "O";
+            // timelineCellDiv.appendChild(stallDiv);
+            timelineCellDiv.innerHTML = "O";
 
         }
-        document.getElementById(timelineHeaderId[i]).appendChild(instructionDiv);
+        document.getElementById(timelineHeaderId[i]).appendChild(timelineCellDiv);
     }
 }
-for (let i = 1; i < 51; i++) {
-    timelineAppendRow(i, [i, i, (i%7!=0)+i, (i%7==0)+i, i&1]);
-}
+// for (let i = 1; i < 3; i++) {
+//     timelineAppendRow(i, [i, i, (i%7!=0)+i, (i%7==0)+i, i&1]);
+// }
+var cnt = 1;
+var intervalId = setInterval(() => {
+  let i = cnt;
+  timelineAppendRow(i, [i, i, (i%7!=0)+i, (i%7==0)+i, i&1]);
+  cnt++;
+  if (cnt == 20) {  // rows to generate
+    clearInterval(intervalId);
+  }
+}, 0);  // time in milisec
 
 class Simulator {
     constructor() {
@@ -60,7 +90,7 @@ class Simulator {
           let registerDiv = document.createElement("div");
           registerDiv.className = "register-row";
           registerDiv.innerHTML = `<div class="register-name">x${i}</div>
-          <div class="register-value">${this.RF[i]}</div>`;
+          <div class="register-value" id="register-x${i}">${this.RF[i]}</div>`;
           document.getElementById("register").getElementsByClassName("register-container")[0].appendChild(registerDiv);
         }
 
@@ -78,6 +108,11 @@ class Simulator {
           </div>`;
           document.getElementById("memory").getElementsByClassName("memory-container")[0].appendChild(memoryDiv);
         }
+
+        document.querySelector('#but-hex').addEventListener('click', function(){RFSync(simulator.RF, 'hex')})
+        document.querySelector('#but-dec').addEventListener('click', function(){RFSync(simulator.RF, 'dec')})
+        document.querySelector('#but-udec').addEventListener('click', function(){RFSync(simulator.RF, 'udec')})
+
     }
 
     fetch() {
@@ -854,3 +889,4 @@ class Simulator {
 }
 
 var simulator = new Simulator();
+RFSync(simulator.RF, 'hex')
