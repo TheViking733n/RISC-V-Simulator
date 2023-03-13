@@ -316,7 +316,7 @@ class Simulator {
 
         ret.rs1 = toint(r1)
         ret.rd = toint(r)
-        if (imm[0] == 1) {
+        if (imm[0] == '1') {
             ret.imm = negative(imm)
         }
         else {
@@ -707,7 +707,7 @@ class Simulator {
 
         }
         imm = toint(imm)
-        if (fun3 = "000") {
+        if (fun3 == "000") {
             if (imm == 0) {
                 ret.op = "ecall"
             }
