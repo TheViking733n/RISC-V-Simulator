@@ -8,12 +8,15 @@ body {
 }
 
 .scrollable {
-  overflow-y: scroll;
+  overflow: hidden;
   /* scrollbar-color: rebeccapurple green; */
   scrollbar-width: thin;  
   color: white;
   /* margin-left:-20px;
   padding-left:20px; */
+}
+.scrollable:hover {
+  overflow-y: overlay;
 }
 
 
@@ -180,7 +183,7 @@ content{
 }
 
 .timeline {
-  width: 25rem;
+  width: 24rem;
   height: 90%;
   /* background-color: green; */
   display: flex;
