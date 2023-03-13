@@ -8,36 +8,234 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <header>
+    <!-- <header>
         <div class="control-buttons">
             <button class="step">STEP</button>
             <button class="run">RUN</button>
             <button class="reset">RESET</button>
         </div>
         <div class="slidecontainer">
-            <span>Speed: </span>
+            <span>Simulation Speed: </span>
             <input type="range" min="1" max="100" value="50">
         </div>
-    </header>
+    </header> -->
     <content>
         <div class="instructions-pane">
             <h2>Instructions</h2>
 
-            <div class="instructions scrollable">
+            <div class="instructions-box dp24">
                 <div class="instruction-row instruction-col-heading">
                     <div class="instruction-addr">Address</div>
                     <div class="instruction-hex">Hex</div>
                     <div class="instruction-decoded">Decoded</div>
                 </div>
+                <div class="instructions scrollable">
+
+                </div>
+            </div>
+            <div class="control-buttons-pane dp24">
+                <div class="cycle-count-and-file-chooser">
+                    <div class="instructions-cycle-wrapper">
+                        <span>Cycles:</span>
+                        <span class="cycle-count">0</span>
+                    </div>
+                    <div class="file-chooser">
+                        <!-- <span>Select Machine<br>Code File (*.mc): </span>
+                        <input type="file" id="file-chooser" accept=".mc"> -->
+                        <label for="thefile" class="file">Choose .mc file
+                            <input type="file" id="thefile" accept="*.*" />
+                          </label>
+                    </div>
+                </div>
+    
+                <div class="control-buttons-container ">
+                    <div class="control-buttons">
+                        <button id="btn-step" class="step">STEP</button>
+                        <button id="btn-run" class="run">RUN</button>
+                        <button id="btn-reset" class="reset">RESET</button>
+                    </div>
+                    <div class="slidecontainer">
+                        <span>Simulation Speed: </span>
+                        <input id="speed" type="range" min="1" max="100" value="50">
+                    </div>
+                    
+                    <div class="base-switcher">
+                        <span>Number Format: </span>
+                        <div class="dropup">
+                            <button class="dropbtn">Hexadecimal</button>
+                            <div class="dropup-content">
+                                <div id="but-hex">Hexadecimal</div>
+                                <div id="but-dec">Decimal</div>
+                                <div id="but-udec">Unsigned</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="timeline-memory-register-pane">
+
+            <div class="timeline-pane">
+                <h2>Timeline</h2>
+                <div class="timeline-box dp24">
+                    <div class="timeline-header-box">
+                        <div class="timeline-header">Cycle</div>
+                        <div class="timeline-header">Fetch</div>
+                        <div class="timeline-header">Decode</div>
+                        <div class="timeline-header">Execute</div>
+                        <div class="timeline-header">Memory Access</div>
+                        <div class="timeline-header">Write Back</div>
+                    </div>
+                    <div class="timeline scrollable-x">
+                        <div class="timeline-col" id="cycle"></div>
+                        <div class="timeline-col" id="fetch"></div>
+                        <div class="timeline-col" id="decode"></div>
+                        <div class="timeline-col" id="execute"></div>
+                        <div class="timeline-col" id="memoryaccess"></div>
+                        <div class="timeline-col" id="writeback"></div>
+                    </div>
+                </div>
             </div>
 
-            <div class="instructions-cycle-wrapper">
-                <span>Cycles:</span>
-                <span class="cycle-count">0</span>
+
+            <div class="register-pane">
+                <div class="register-box dp24">
+                    <div id="register">
+                        <div class="register-heading-container">
+                            <div class="register-row register-col-heading">
+                                <div class="register-name">Register</div>
+                                <div class="register-value">Value</div>
+                            </div>
+                        </div>
+                        <div class="register-container scrollable">
+                        </div>
+                    </div>
+                </div>
             </div>
+
+
+            <div class="memory-pane">
+                <div class="memory-box dp24">
+                    <div id="memory">
+                        <div class="memory-heading-container">
+                            <div class="memory-row">
+                                <div class="memory-address memory-col-heading">Address</div>
+                                <div class="memory-value">
+                                    <div class="memory-cell memory-col-heading">+0</div>
+                                    <div class="memory-cell memory-col-heading">+1</div>
+                                    <div class="memory-cell memory-col-heading">+2</div>
+                                    <div class="memory-cell memory-col-heading">+3</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="memory-container scrollable">
+                          <div class="memory-row">
+                              <div class="memory-address"></div>
+                              <div class="memory-value">
+                                  <div class="memory-cell"></div>
+                                  <div class="memory-cell"></div>
+                                  <div class="memory-cell"></div>
+                                  <div class="memory-cell"></div>
+                              </div>
+                          </div>
+                          <div class="memory-row">
+                              <div class="memory-address"></div>
+                              <div class="memory-value">
+                                  <div class="memory-cell"></div>
+                                  <div class="memory-cell"></div>
+                                  <div class="memory-cell"></div>
+                                  <div class="memory-cell"></div>
+                              </div>
+                          </div>
+                          <div class="memory-row">
+                              <div class="memory-address"></div>
+                              <div class="memory-value">
+                                  <div class="memory-cell"></div>
+                                  <div class="memory-cell"></div>
+                                  <div class="memory-cell"></div>
+                                  <div class="memory-cell"></div>
+                              </div>
+                          </div>
+                          <div class="memory-row">
+                              <div class="memory-address"></div>
+                              <div class="memory-value">
+                                  <div class="memory-cell"></div>
+                                  <div class="memory-cell"></div>
+                                  <div class="memory-cell"></div>
+                                  <div class="memory-cell"></div>
+                              </div>
+                          </div>
+                          <div class="memory-row">
+                              <div class="memory-address"></div>
+                              <div class="memory-value">
+                                  <div class="memory-cell"></div>
+                                  <div class="memory-cell"></div>
+                                  <div class="memory-cell"></div>
+                                  <div class="memory-cell"></div>
+                              </div>
+                          </div>
+                          <div class="memory-row">
+                              <div class="memory-address"></div>
+                              <div class="memory-value">
+                                  <div class="memory-cell"></div>
+                                  <div class="memory-cell"></div>
+                                  <div class="memory-cell"></div>
+                                  <div class="memory-cell"></div>
+                              </div>
+                          </div>
+                          <div class="memory-row">
+                              <div class="memory-address"></div>
+                              <div class="memory-value">
+                                  <div class="memory-cell"></div>
+                                  <div class="memory-cell"></div>
+                                  <div class="memory-cell"></div>
+                                  <div class="memory-cell"></div>
+                              </div>
+                          </div>
+                          <div class="memory-row">
+                              <div class="memory-address"></div>
+                              <div class="memory-value">
+                                  <div class="memory-cell"></div>
+                                  <div class="memory-cell"></div>
+                                  <div class="memory-cell"></div>
+                                  <div class="memory-cell"></div>
+                              </div>
+                          </div>
+                          <div class="memory-row">
+                              <div class="memory-address"></div>
+                              <div class="memory-value">
+                                  <div class="memory-cell"></div>
+                                  <div class="memory-cell"></div>
+                                  <div class="memory-cell"></div>
+                                  <div class="memory-cell"></div>
+                              </div>
+                          </div>
+                          <div class="memory-row">
+                              <div class="memory-address"></div>
+                              <div class="memory-value">
+                                  <div class="memory-cell"></div>
+                                  <div class="memory-cell"></div>
+                                  <div class="memory-cell"></div>
+                                  <div class="memory-cell"></div>
+                              </div>
+                          </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+
+
+
 
         </div>
 
+
+
+<!-- 
         <div class="timeline-pane">
             <h2>Timeline</h2>
             <div class="timeline-box">
@@ -58,7 +256,6 @@
                     <div class="timeline-col" id="memoryaccess"></div>
                     <div class="timeline-col" id="writeback"></div>
                 </div>
-                <!-- Lorem ipsum dolor sit, amet consectetur adipisicing elit. Consequatur deleniti laudantium repellendus. Omnis autem mollitia ab nobis tempore necessitatibus commodi, voluptate velit maxime sunt. Dolore quas possimus iste velit? Autem, perspiciatis laudantium? Alias laboriosam sequi facilis fugit, nihil voluptatum, consectetur tenetur inventore quidem libero neque modi tempora totam? Quae eum itaque cum, sed amet dicta ratione, molestias veritatis reprehenderit labore temporibus facilis ut quam nisi, earum pariatur inventore omnis eveniet. Iusto laudantium, qui numquam aut iste cupiditate optio. Nemo dicta inventore, earum doloremque nulla voluptatibus ab, omnis nam atque cum eaque aliquid maiores deserunt unde numquam minus sunt quo, dolores repellendus odio esse autem eligendi! In nobis cumque aliquid, consequuntur ullam laudantium eos! Atque asperiores debitis suscipit corporis laudantium, cupiditate vero sapiente modi quia corrupti, beatae ex harum reprehenderit! Delectus quidem quisquam sit quia, nulla earum quasi voluptate cupiditate officiis perferendis pariatur in aut vitae. Animi, ad quibusdam praesentium dolorem aliquam ex. Expedita sed nostrum necessitatibus hic incidunt maxime vero quis, exercitationem facere ipsam aut voluptas provident modi veniam aperiam odio quidem? Distinctio, veritatis? Numquam aliquam labore asperiores voluptate vitae nostrum voluptatibus sunt corrupti! Doloribus voluptatum libero corrupti aut distinctio, quasi dolorem quidem ad suscipit? Dolorem temporibus veniam nesciunt? Ex assumenda delectus perspiciatis ipsa quae, voluptas incidunt suscipit aliquam pariatur porro ipsum saepe. Aperiam, corporis. Ut dolore, incidunt fugit doloremque perspiciatis blanditiis laudantium a magni ea aliquam tempore possimus voluptatibus. Asperiores dolorum ipsam consequuntur, doloribus delectus consequatur praesentium molestiae voluptatibus dignissimos cupiditate quo facere provident quis laborum ut eligendi ex odit temporibus sit deserunt neque minus quisquam eaque. Eaque deleniti eum aspernatur atque nihil architecto esse minus asperiores sequi sed nobis quia velit at iusto suscipit quis veritatis animi, voluptates corrupti officiis exercitationem laboriosam aut alias debitis! Accusamus, impedit. Facilis ad cumque eligendi at sed optio adipisci sit commodi labore a eveniet fugiat autem aspernatur, veritatis tenetur sapiente libero et dolore. Magni, ratione! Consectetur eaque saepe vero magnam, ducimus minima eveniet doloribus beatae temporibus eligendi omnis voluptatum odit repudiandae quas dignissimos laboriosam doloremque fugiat placeat! Ipsum porro, incidunt, qui laborum beatae sunt laudantium exercitationem magni minima veniam ratione dignissimos accusamus alias praesentium vel nam id, odit accusantium molestias numquam ducimus odio sapiente aliquid? Alias assumenda doloremque rem temporibus necessitatibus rerum accusantium. Suscipit at repudiandae sequi autem earum illum quia obcaecati ex est architecto iste nemo facilis porro explicabo assumenda dolore, quidem esse, incidunt iusto quos. Aperiam magni culpa, optio explicabo natus id laboriosam quis laudantium, beatae delectus iste, similique corrupti mollitia debitis rerum. Animi repellendus alias quis incidunt iure distinctio doloremque obcaecati eligendi quasi veniam! Error exercitationem impedit molestias cum aspernatur perferendis dolores architecto quae dignissimos ad, vel neque iusto dolore voluptate sequi, ab accusamus facilis voluptatibus in quis tempora dicta iure aliquid! Numquam, ullam. Atque odit dolores officiis nemo quis ullam aperiam incidunt vel. Repellendus alias illum id quia ratione, blanditiis quos voluptas consectetur eos reiciendis quasi rerum doloremque quae suscipit voluptatibus repellat nostrum eum? Recusandae, sit doloribus totam optio atque, provident, dolore explicabo cupiditate dignissimos reiciendis vel dolores! -->
             </div>
         </div>
 
@@ -106,7 +303,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> -->
             
     </content>
     <script src="index.js"></script>
