@@ -398,3 +398,203 @@ function decode2(a) {
     ret.rs1 = toint(r1);
     ret.rs2 = toint(r2);
     ret.rd = toint(r);
+    if (fun3 == "000" && fun7 == "0000000") {
+      ret.op = "add";
+    } else if (fun3 == "000" && fun7 == "0100000") {
+      ret.op = "sub";
+    } else if (fun3 == "100" && fun7 == "0000000") {
+      ret.op = "xor";
+    } else if (fun3 == "110" && fun7 == "0000000") {
+      ret.op = "or";
+    } else if (fun3 == "111" && fun7 == "0000000") {
+      ret.op = "and";
+    } else if (fun3 == "001" && fun7 == "0000000") {
+      ret.op = "sll";
+    } else if (fun3 == "101" && fun7 == "0000000") {
+      ret.op = "srl";
+    } else if (fun3 == "101" && fun7 == "0100000") {
+      ret.op = "sra";
+    } else if (fun3 == "010" && fun7 == "0000000") {
+      ret.op = "slt";
+    } else if (fun3 == "011" && fun7 == "0000000") {
+      ret.op = "sltu";
+    }
+
+    return ret;
+  } else if (opcode == "0010011") {
+    let ret = { op: 0, rd: 0, rs1: 0, imm: 0, rs2: 0 };
+    let r = "";
+    for (let i = 20; i < 25; i++) {
+      r = r + s[i];
+    }
+    let fun3 = "";
+
+    for (let i = 17; i < 20; i++) {
+      fun3 = fun3 + s[i];
+    }
+
+    let r1 = "";
+    for (let i = 12; i < 17; i++) {
+      r1 = r1 + s[i];
+    }
+
+    let imm = "";
+    for (let i = 0; i < 12; i++) {
+      imm = imm + s[i];
+    }
+
+    let fun7 = "";
+    for (let i = 0; i < 7; i++) {
+      fun7 += imm[i];
+    }
+
+    ret.rs1 = toint(r1);
+    ret.rd = toint(r);
+    if (imm[0] == 1) {
+      ret.imm = negative(imm);
+    } else {
+      ret.imm = toint(imm);
+    }
+
+    if (fun3 == "000") {
+      ret.op = "add";
+    } else if (fun3 == "100") {
+      ret.op = "xor";
+    } else if (fun3 == "110") {
+      ret.op = "or";
+    } else if (fun3 == "111") {
+      ret.op = "and";
+    } else if (fun3 == "001" && fun7 == "0000000") {
+      ret.op = "sll";
+    } else if (fun3 == "101" && fun7 == "0000000") {
+      ret.op = "srl";
+    } else if (fun3 == "101" && fun7 == "0100000") {
+      ret.op = "sra";
+    } else if (fun3 == "010") {
+      ret.op = "slt";
+    } else if (fun3 == "011") {
+      ret.op = "sltu";
+    }
+    ret.op = ret.op + "i";
+
+    return ret;
+  } else if (opcode == "0000011") {
+    let ret = { op: "", rd: 0, rs1: 0, imm: 0, rs2: 0 };
+    let r = "";
+    for (let i = 20; i < 25; i++) {
+      r = r + s[i];
+    }
+    let fun3 = "";
+
+    for (let i = 17; i < 20; i++) {
+      fun3 = fun3 + s[i];
+    }
+
+    let r1 = "";
+    for (let i = 12; i < 17; i++) {
+      r1 = r1 + s[i];
+    }
+
+    let imm = "";
+    for (let i = 0; i < 12; i++) {
+      imm = imm + s[i];
+    }
+
+    ret.rs1 = toint(r1);
+    ret.rd = toint(r);
+    if (imm[0] == "1") {
+      ret.imm = negative(imm);
+    } else {
+      ret.imm = toint(imm);
+    }
+
+    if (fun3 == "000") {
+      ret.op = "lb";
+    } else if (fun3 == "001") {
+      ret.op = "lh";
+    } else if (fun3 == "010") {
+      ret.op = "lw";
+    } else if (fun3 == "100") {
+      ret.op = "lbu";
+    } else if (fun3 == "101") {
+      ret.op = "lhu";
+    }
+    return ret;
+  } else if (opcode == "0100011") {
+    let ret = { op: "", rs1: 0, rs2: 0, imm: 0, rd: 0 };
+    let imm = "";
+    for (let i = 0; i < 7; i++) {
+      imm = imm + s[i];
+    }
+    for (let i = 20; i < 25; i++) {
+      imm = imm + s[i];
+    }
+    let fun3 = "";
+
+    for (let i = 17; i < 20; i++) {
+      fun3 = fun3 + s[i];
+    }
+
+    let rs1 = "";
+    for (let i = 12; i < 17; i++) {
+      rs1 = rs1 + s[i];
+    }
+
+    let rs2 = "";
+    for (let i = 7; i < 12; i++) {
+      rs2 = rs2 + s[i];
+    }
+
+    ret.rs1 = toint(rs1);
+    ret.rs2 = toint(rs2);
+    if (imm[0] == "1") {
+      ret.imm = negative(imm);
+    } else {
+      ret.imm = toint(imm);
+    }
+
+    if (fun3 == "000") {
+      ret.op = "sb";
+    } else if (fun3 == "001") {
+      ret.op = "sh";
+    } else if (fun3 == "010") {
+      ret.op = "sw";
+    }
+
+    return ret;
+  } else if (opcode == "1100011") {
+    let ret = { op: "", rs1: 0, rs2: 0, imm: 0, rd: 0 };
+    let imm = "";
+    imm = imm + s[0];
+    imm = imm + s[24];
+
+    for (let i = 1; i < 7; i++) {
+      imm = imm + s[i];
+    }
+    for (let i = 20; i < 24; i++) {
+      imm = imm + s[i];
+    }
+
+    imm += "0";
+
+    let fun3 = "";
+
+    for (let i = 17; i < 20; i++) {
+      fun3 = fun3 + s[i];
+    }
+
+    let rs1 = "";
+    for (let i = 12; i < 17; i++) {
+      rs1 = rs1 + s[i];
+    }
+
+    let rs2 = "";
+    for (let i = 7; i < 12; i++) {
+      rs2 = rs2 + s[i];
+    }
+
+    ret.rs1 = toint(rs1);
+    ret.rs2 = toint(rs2);
+    if (imm[0] == "1") {
+      ret.imm = negative(imm);
+    } else {

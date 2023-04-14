@@ -197,4 +197,104 @@
                             </div>
                         </div>
                     </div>
-                    
+
+                    <div class="policy-dropdown">
+                        <div class="dropup">
+                            <button class="dropbtn" style="margin-right: 0px;">LRU</button>
+                            <div class="dropup-content">
+                                <div id="but-policy-lru">LRU</div>
+                                <div id="but-policy-fifo">FIFO</div>
+                                <div id="but-policy-random">RANDOM</div>
+                                <div id="but-policy-lfu">LFU</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="dcache-dropdown">
+                        <div class="dropup">
+                            <button class="dropbtn" style="margin-right: 0px;">Direct Map</button>
+                            <div class="dropup-content">
+                                <div id="but-dcache-direct">Direct Map</div>
+                                <div id="but-dcache-fully">Fully Assoc</div>
+                                <div id="but-dcache-set">Set Assoc</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="timeline-memory-register-pane">
+
+            <div class="timeline-pane">
+                <h2>Timeline</h2>
+                <div class="timeline-box dp24">
+                    <div class="timeline-header-box">
+                        <div class="timeline-header timeline-header-cycle">Cycle</div>
+                        <div class="timeline-header">Fetch</div>
+                        <div class="timeline-header">Decode</div>
+                        <div class="timeline-header">Execute</div>
+                        <div class="timeline-header">Memory</div>
+                        <div class="timeline-header">Write</div>
+                    </div>
+                    <div class="timeline scrollable-x">
+                        <div class="timeline-col" id="cycle"></div>
+                        <div class="timeline-col" id="fetch"></div>
+                        <div class="timeline-col" id="decode"></div>
+                        <div class="timeline-col" id="execute"></div>
+                        <div class="timeline-col" id="memoryaccess"></div>
+                        <div class="timeline-col" id="writeback"></div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="register-pane">
+                <div class="register-box dp24">
+                    <div id="register">
+                        <div class="register-heading-container">
+                            <div class="register-row register-col-heading">
+                                <div class="register-name">Reg</div>
+                                <div class="register-value">Value</div>
+                            </div>
+                        </div>
+                        <div class="register-container scrollable">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="memory-pane">
+                <div class="memory-box dp24">
+                    <div id="memory">
+                        <div class="memory-heading-container">
+                            <div class="memory-row">
+                                <div class="memory-address memory-col-heading">Memory</div>
+                                <div class="memory-value">
+                                    <div class="memory-cell memory-col-heading">+0</div>
+                                    <div class="memory-cell memory-col-heading">+1</div>
+                                    <div class="memory-cell memory-col-heading">+2</div>
+                                    <div class="memory-cell memory-col-heading">+3</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="memory-container scrollable">
+                          <div class="memory-row">
+                              <div class="memory-address"></div>
+                              <div class="memory-value">
+                                  <div class="memory-cell"></div>
+                                  <div class="memory-cell"></div>
+                                  <div class="memory-cell"></div>
+                                  <div class="memory-cell"></div>
+                              </div>
+                          </div>
+                          <div class="memory-row">
+                              <div class="memory-address"></div>
+                              <div class="memory-value">
+                                  <div class="memory-cell"></div>
+                                  <div class="memory-cell"></div>
+                                  <div class="memory-cell"></div>
+                                  <div class="memory-cell"></div>
+                              </div>
