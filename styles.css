@@ -1,51 +1,51 @@
 *{
-    margin: 0px;
-    padding: 0px;
+  margin: 0px;
+  padding: 0px;
 }
 
 body {
-  overflow: hidden;
-  background-color: #1C1F2B;
-  color: white;
-  font-family: monospace;
-  text-shadow: 3px 3px 3px #000000;
+overflow: hidden;
+background-color: #1C1F2B;
+color: white;
+font-family: monospace;
+text-shadow: 3px 3px 3px #000000;
 
-  /* background-image: url('background.jpg'); */
-  /* -webkit-backdrop-filter: blur(1px); */
+/* background-image: url('background.jpg'); */
+/* -webkit-backdrop-filter: blur(1px); */
 }
 
 .scrollable {
-  overflow: hidden;
-  /* scrollbar-color: rebeccapurple green; */
-  scrollbar-width: thin;  
-  color: white;
-  /* margin-left:-20px;
-  padding-left:20px; */
+overflow: hidden;
+/* scrollbar-color: rebeccapurple green; */
+scrollbar-width: thin;  
+color: white;
+/* margin-left:-20px;
+padding-left:20px; */
 }
 .scrollable:hover {
-  overflow-y: overlay;
+overflow-y: overlay;
 }
 
 .scrollable-x {
-  overflow: hidden;
-  /* scrollbar-color: rebeccapurple green; */
-  scrollbar-width: thin;  
-  color: white;
-  /* margin-left:-20px;
-  padding-left:20px; */
+overflow: hidden;
+/* scrollbar-color: rebeccapurple green; */
+scrollbar-width: thin;  
+color: white;
+/* margin-left:-20px;
+padding-left:20px; */
 }
 .scrollable-x:hover {
-  overflow-x: overlay;
+overflow-x: overlay;
 }
 
 
 
 
 /* header{
-    width: 90vw;
-    height: 12vh;
-    display:flex;
-    align-items: center;
+  width: 90vw;
+  height: 12vh;
+  display:flex;
+  align-items: center;
 } */
 
 
@@ -56,44 +56,144 @@ body {
 
 
 content{
-  display: flex;
-  width: 100vw;
-  height: 98vh;
-  flex-wrap: wrap;
-  justify-content: left;
-  margin-top: 1rem;
+display: flex;
+width: 100vw;
+height: 98vh;
+flex-wrap: wrap;
+justify-content: left;
+margin-top: 1rem;
 }
 
 
 .instructions-pane{
-  height: 100%;
-  width: 30%;   
-  margin-left: 1rem; 
-  margin-right: 1rem;
-  background-color: #1C1F2B;
-  display: flex;
-  align-items: center;
-  justify-content: top;
-  flex-direction: column;
+height: 100%;
+width: 30%;   
+margin-left: 1rem; 
+margin-right: 1rem;
+background-color: #1C1F2B;
+display: flex;
+align-items: center;
+justify-content: top;
+flex-direction: column;
 }
 .instructions-pane h2 {
-  font-size: 1.8rem;
-  /* margin-bottom: .5rem; */
+font-size: 1.8rem;
+/* margin-bottom: .5rem; */
 }
 .instructions-box {
-  width: 98%;
-  height: 30%;
-  /* background-color: red; */
-  margin-top: 1rem;
-  /* margin-bottom: 1rem; */
-  overflow-x: hidden;
-  /* border: 2px solid white; */
-  overflow: hidden;
-  border-radius: 10px;
-  margin-bottom: 1.2rem;
+width: 98%;
+height: 30%;
+/* background-color: red; */
+margin-top: 1rem;
+/* margin-bottom: 1rem; */
+overflow-x: hidden;
+/* border: 2px solid white; */
+overflow: hidden;
+border-radius: 10px;
+margin-bottom: 1.2rem;
 }
 .instructions {
-  width: 100%;
-  height: 88%;
-  background-color: #303549;
+width: 100%;
+height: 88%;
+background-color: #303549;
 }
+
+.instruction-row {
+width: 100%;
+/* height: 2.5rem; */
+height: 16%;
+/* background-color: blue; */
+/* border: 1px solid white; */
+display: flex;
+border-bottom: #1C1F2B 3px solid;
+}
+
+
+.instruction-addr, .instruction-hex, .instruction-decoded {
+display: flex;
+align-items: center;
+justify-content: center;
+font-size: 1.1rem;
+/* border: 1px solid white; */
+color: white;
+}
+
+.instruction-addr {
+width: 20%;
+height: 100%;
+/* background-color: lightblue; */
+border-right: #1C1F2B 3px solid;
+}
+.instruction-hex {
+width: 30%;
+height: 100%;
+/* background-color: pink; */
+border-right: #1C1F2B 3px solid;
+}
+.instruction-decoded {
+width: 50%;
+height: 100%;
+/* background-color: purple; */
+}
+.instruction-col-heading {
+background-color: #131417;
+font-weight: bold;
+height: 15%;
+border-bottom: none;
+}
+.instruction-col-header {
+font-size: 1.3rem;
+border-right: none;
+}
+
+
+.instruction-row:hover {
+background-color: #272C3D;
+}
+.instruction-col-heading:hover {
+background-color: #131417;
+}
+
+.no-hazard div {
+/* color: #00ff59; */
+color: #00ff00;
+animation-name: no-hazard-animation;
+animation-duration: .3s;
+animation-iteration-count: 1;
+animation-timing-function: ease-in-out;
+}
+.control-hazard div {
+color: yellow;
+animation-name: control-hazard-animation;
+animation-duration: .3s;
+animation-iteration-count: 1;
+}
+.data-hazard div {
+color: red;
+animation-name: data-hazard-animation;
+animation-duration: .3s;
+animation-iteration-count: 1;
+}
+@keyframes no-hazard-animation {
+from {color: white;}
+to {color: #00ff00;}
+}
+@keyframes control-hazard-animation {
+from {color: white;}
+to {color: yellow;}
+}
+@keyframes data-hazard-animation {
+from {color: white;}
+to {color: red;}
+}
+/* .instruction-highlight {
+width: 35%;
+height: 3%;
+position: relative;
+background-color: white; */
+/* z-index: -1; */
+/* transform: translate(2%, 20%);
+} */
+
+
+

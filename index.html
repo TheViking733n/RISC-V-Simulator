@@ -98,3 +98,103 @@
                                 <div class='toggle-text-off'>OFF</div>
                                 <div class='glow-comp'></div>
                                 <div class='toggle-button'></div>
+                                <div class='toggle-text-on'>ON</div>
+                            </div>
+                            <span>Cache</span>
+                        </div>
+                        <div class="knob-container">
+                            <div class='toggle' id="toggle5">
+                                <div class='toggle-text-off'>OFF</div>
+                                <div class='glow-comp'></div>
+                                <div class='toggle-button'></div>
+                                <div class='toggle-text-on'>ON</div>
+                            </div>
+                            <span>Custom<br>Instruction</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="control-buttons">
+                    <button id="btn-step" class="step dp24">STEP</button>
+                    <button id="btn-run" class="run dp24">RUN</button>
+                    <button id="btn-reset" class="reset dp24">RESET</button>
+                    <div class="file-chooser">
+                        <label for="thefile" class="file">Choose .mc file
+                            <input type="file" id="thefile" accept="*.*" />
+                          </label>
+                    </div>
+                </div>
+
+                <div class="control-buttons-container ">
+                    
+                    <div class="base-switcher">
+                        <span>Number Format: </span>
+                        <div class="dropup">
+                            <button class="dropbtn">Hexadecimal</button>
+                            <div class="dropup-content">
+                                <div id="but-hex">Hexadecimal</div>
+                                <div id="but-dec">Decimal</div>
+                                <div id="but-udec">Unsigned</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="slidecontainer">
+                        <span>Simulation Speed: </span>
+                        <input id="speed" type="range" min="1" max="100" value="50">
+                        <span id="speed-value">50</span>
+                    </div>
+                </div>
+
+                <div class="cache-control-container">
+                    <div class="cache-control-box">
+                        <div class="cache-control-left">
+                            <div class="cache-control-title">Ins. Cache Size:</div>
+                            <div class="cache-control-title">Ins. Block Size:</div>
+                            <div class="cache-control-title">Associativity:</div>
+                        </div>
+                        <div class="cache-control-right">
+                            <div class="cache-control-input">
+                                <input id="icache_size" type="number" value="16" min="1" max="99"/>
+                            </div>
+                            <div class="cache-control-input">
+                                <input id="icache_block" type="number" value="4" min="4" max="99" step="4"/>
+                            </div>
+                            <div class="cache-control-input">
+                                <input id="icache_assoc" type="number" value="2" min="1" max="99"/>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="cache-control-box">
+                        <div class="cache-control-left">
+                            <div class="cache-control-title">Data Cache Size:</div>
+                            <div class="cache-control-title">Data Block Size:</div>
+                            <div class="cache-control-title">Associativity:</div>
+                        </div>
+                        <div class="cache-control-right">
+                            <div class="cache-control-input">
+                                <input id="dcache_size" type="number" value="16" min="1" max="99"/>
+                            </div>
+                            <div class="cache-control-input">
+                                <input id="dcache_block" type="number" value="4" min="4" max="99" step="4"/>
+                            </div>
+                            <div class="cache-control-input">
+                                <input id="dcache_assoc" type="number" value="2" min="1" max="99"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="cache-dropdown-box">
+                    <div class="icache-dropdown">
+                        <div class="dropup">
+                            <button class="dropbtn" style="margin-right: 0px;">Direct Map</button>
+                            <div class="dropup-content">
+                                <div id="but-icache-direct">Direct Map</div>
+                                <div id="but-icache-fully">Fully Assoc</div>
+                                <div id="but-icache-set">Set Assoc</div>
+                            </div>
+                        </div>
+                    </div>
+                    
