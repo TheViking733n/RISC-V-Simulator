@@ -598,3 +598,205 @@ function decode2(a) {
     if (imm[0] == "1") {
       ret.imm = negative(imm);
     } else {
+      ret.imm = toint(imm);
+    }
+
+    if (fun3 == "000") {
+      ret.op = "beq";
+    } else if (fun3 == "001") {
+      ret.op = "bne";
+    } else if (fun3 == "100") {
+      ret.op = "blt";
+    } else if (fun3 == "101") {
+      ret.op = "bge";
+    } else if (fun3 == "110") {
+      ret.op = "bltu";
+    } else if (fun3 == "111") {
+      ret.op = "bgeu";
+    }
+
+    return ret;
+  } else if (opcode == "0110111" || opcode == "0010111") {
+    let ret = { op: 0, rd: 0, imm: 0, rs1: 0, rs2: 0 };
+    let rd = "";
+    for (let i = 20; i < 25; i++) {
+      rd = rd + s[i];
+    }
+
+    let imm = "";
+    for (let i = 0; i < 20; i++) {
+      imm = imm + s[i];
+    }
+
+    ret.rd = toint(rd);
+    if (imm[0] == "1") {
+      ret.imm = negative(imm);
+    } else {
+      ret.imm = toint(imm);
+    }
+
+    if (opcode == "0010111") {
+      ret.op = "auipc";
+    } else {
+      ret.op = "lui";
+    }
+
+    return ret;
+  } else if (opcode == "1101111") {
+    let ret = { op: "", rd: 0, imm: 0, rs1: 0, rs2: 0 };
+    let rd = "";
+    for (let i = 20; i < 25; i++) {
+      rd = rd + s[i];
+    }
+
+    let imm = "";
+    imm = imm + s[0];
+    for (let i = 12; i < 20; i++) {
+      imm = imm + s[i];
+    }
+    imm = imm + s[11];
+    for (let i = 1; i < 11; i++) {
+      imm = imm + s[i];
+    }
+    imm += "0";
+
+    ret.rd = toint(rd);
+    if (imm[0] == "1") {
+      ret.imm = negative(imm);
+    } else {
+      ret.imm = toint(imm);
+    }
+    ret.op = "jal";
+
+    return ret;
+  } else if (opcode == "1100111") {
+    let ret = { op: "", rd: 0, rs1: 0, imm: 0, rd: 0 };
+    let r = "";
+    for (let i = 20; i < 25; i++) {
+      r = r + s[i];
+    }
+
+    let fun3 = "";
+
+    for (let i = 17; i < 20; i++) {
+      fun3 = fun3 + s[i];
+    }
+
+    let r1 = "";
+    for (let i = 12; i < 17; i++) {
+      r1 = r1 + s[i];
+    }
+
+    let imm = "";
+    for (let i = 0; i < 12; i++) {
+      imm = imm + s[i];
+    }
+
+    let fun7 = "";
+    for (let i = 0; i < 7; i++) {
+      fun7 += imm[i];
+    }
+
+    ret.rs1 = toint(r1);
+    ret.rd = toint(r);
+    if (imm[0] == "1") {
+      ret.imm = negative(imm);
+    } else {
+      ret.imm = toint(imm);
+    }
+
+    if (fun3 == "000") {
+      ret.op = "jalr";
+    }
+
+    return ret;
+  } else if (opcode == "1110011") {
+    let ret = { op: "", rd: 0, rs1: 0, imm: 0, rs2: 0 };
+    let r = "";
+    for (let i = 20; i < 25; i++) {
+      r = r + s[i];
+    }
+
+    let fun3 = "";
+
+    for (let i = 17; i < 20; i++) {
+      fun3 = fun3 + s[i];
+    }
+
+    let r1 = "";
+    for (let i = 12; i < 17; i++) {
+      r1 = r1 + s[i];
+    }
+
+    let imm = "";
+    for (let i = 0; i < 12; i++) {
+      imm = imm + s[i];
+    }
+
+    let fun7 = "";
+    for (let i = 0; i < 7; i++) {
+      fun7 += imm[i];
+    }
+
+    ret.rs1 = toint(r1);
+    ret.rd = toint(r);
+    if (imm[0] == "1") {
+      ret.imm = negative(imm);
+    } else {
+      ret.imm = toint(imm);
+    }
+    imm = toint(imm);
+    if ((fun3 = "000")) {
+      if (imm == 0) {
+        ret.op = "ecall";
+      } else if (imm == 1) {
+        ret.op = "ebreak";
+      }
+    }
+
+    return ret;
+  } else {
+    let ret = { op: "error", rs1: 0, rs2: 0, rd: 0, imm: 0 };
+    return ret;
+  }
+}
+function print_ins(obj) {
+  let op = obj.op;
+  if (
+    op == "add" ||
+    op == "sub" ||
+    op == "xor" ||
+    op == "or" ||
+    op == "and" ||
+    op == "sll" ||
+    op == "srl" ||
+    op == "sra" ||
+    op == "slt" ||
+    op == "sltu"
+  ) {
+    let s =
+      obj.op + " " + "x" + obj.rd + " " + "x" + obj.rs1 + " " + "x" + obj.rs2;
+    return s;
+  }
+  if (
+    op == "addi" ||
+    op == "xori" ||
+    op == "ori" ||
+    op == "andi" ||
+    op == "slli" ||
+    op == "srli" ||
+    op == "srai" ||
+    op == "slti" ||
+    op == "sltiu"
+  ) {
+    let s = obj.op + " " + "x" + obj.rd + " " + "x" + obj.rs1 + " " + obj.imm;
+    return s;
+  }
+  if (op == "lb" || op == "lh" || op == "lw" || op == "lbu" || op == "lhu") {
+    let s = obj.op + " " + "x" + obj.rd + " " + obj.imm + "(x" + obj.rs1 + ")";
+    return s;
+  }
+  if (op == "sb" || op == "sh" || op == "sw") {
+    let s = obj.op + " " + "x" + obj.rs2 + " " + obj.imm + "(x" + obj.rs1 + ")";
+    return s;
+  }
