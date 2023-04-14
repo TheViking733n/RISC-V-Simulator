@@ -1,0 +1,99 @@
+*{
+    margin: 0px;
+    padding: 0px;
+}
+
+body {
+  overflow: hidden;
+  background-color: #1C1F2B;
+  color: white;
+  font-family: monospace;
+  text-shadow: 3px 3px 3px #000000;
+
+  /* background-image: url('background.jpg'); */
+  /* -webkit-backdrop-filter: blur(1px); */
+}
+
+.scrollable {
+  overflow: hidden;
+  /* scrollbar-color: rebeccapurple green; */
+  scrollbar-width: thin;  
+  color: white;
+  /* margin-left:-20px;
+  padding-left:20px; */
+}
+.scrollable:hover {
+  overflow-y: overlay;
+}
+
+.scrollable-x {
+  overflow: hidden;
+  /* scrollbar-color: rebeccapurple green; */
+  scrollbar-width: thin;  
+  color: white;
+  /* margin-left:-20px;
+  padding-left:20px; */
+}
+.scrollable-x:hover {
+  overflow-x: overlay;
+}
+
+
+
+
+/* header{
+    width: 90vw;
+    height: 12vh;
+    display:flex;
+    align-items: center;
+} */
+
+
+
+
+
+
+
+
+content{
+  display: flex;
+  width: 100vw;
+  height: 98vh;
+  flex-wrap: wrap;
+  justify-content: left;
+  margin-top: 1rem;
+}
+
+
+.instructions-pane{
+  height: 100%;
+  width: 30%;   
+  margin-left: 1rem; 
+  margin-right: 1rem;
+  background-color: #1C1F2B;
+  display: flex;
+  align-items: center;
+  justify-content: top;
+  flex-direction: column;
+}
+.instructions-pane h2 {
+  font-size: 1.8rem;
+  /* margin-bottom: .5rem; */
+}
+.instructions-box {
+  width: 98%;
+  height: 30%;
+  /* background-color: red; */
+  margin-top: 1rem;
+  /* margin-bottom: 1rem; */
+  overflow-x: hidden;
+  /* border: 2px solid white; */
+  overflow: hidden;
+  border-radius: 10px;
+  margin-bottom: 1.2rem;
+}
+.instructions {
+  width: 100%;
+  height: 88%;
+  background-color: #303549;
+}

@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RISC-V Simulator</title>
+    <link rel="stylesheet" href="styles.css">
+    <!-- <script src='//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script> -->
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js" integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8=" crossorigin="anonymous"></script>
+</head>
+<body>
+    <!-- <header>
+        <div class="control-buttons">
+            <button class="step">STEP</button>
+            <button class="run">RUN</button>
+            <button class="reset">RESET</button>
+        </div>
+        <div class="slidecontainer">
+            <span>Simulation Speed: </span>
+            <input type="range" min="1" max="100" value="50">
+        </div>
+    </header> -->
+    <content>
+        <div class="instructions-pane">
+            <h2>Instructions</h2>
+
+            <div class="instructions-box dp24">
+                <div class="instruction-row instruction-col-heading">
+                    <div class="instruction-addr instruction-col-header">Address</div>
+                    <div class="instruction-hex instruction-col-header">Hex</div>
+                    <div class="instruction-decoded instruction-col-header">Decoded</div>
+                </div>
+                <div class="instructions scrollable">
+
+                </div>
+            </div>
+
+
+            <div class="control-buttons-pane dp24">
+                <!-- <div class="cycle-count-and-file-chooser">
+                    <div class="instructions-cycle-wrapper">
+                        <span>Cycles:</span>
+                        <span class="cycle-count">0</span>
+                    </div>
+                    <div class="text-segment-load-wrapper">
+                        <span class="text-segment-load-text">Load Text Segment:</span>
+                            <input type="checkbox" class="toggle-switch" id="text-segment-load">
+                    </div>
+                </div> -->
+
+                <div class="knobs-box">
+                    <div class="knobs-left-box">
+                        <div class="knob-container">
+                            <div class='toggle' id="toggle1">
+                                <div class='toggle-text-off'>OFF</div>
+                                <div class='glow-comp'></div>
+                                <div class='toggle-button'></div>
+                                <div class='toggle-text-on'>ON</div>
+                            </div>
+                            <span>
+                                <dfn data-info="Enable or disable pipeline execution">Pipeline</dfn>
+                            </span>
+                        </div>
+                        <div class="knob-container">
+                            <div class='toggle' id="toggle2">
+                                <div class='toggle-text-off'>OFF</div>
+                                <div class='glow-comp'></div>
+                                <div class='toggle-button'></div>
+                                <div class='toggle-text-on'>ON</div>
+                            </div>
+                            <span>
+                                <dfn data-info="Enable or disable pipeline execution">Data<br>Forwarding</dfn>
+                            </span>
+                        </div>
+                        <div class="knob-container">
+                            <div class='toggle' id="toggle3">
+                                <div class='toggle-text-off'>OFF</div>
+                                <div class='glow-comp'></div>
+                                <div class='toggle-button'></div>
+                                <div class='toggle-text-on'>ON</div>
+                            </div>
+                            <span>Register File</span>
+                        </div>
+                    </div>
+                    <div class="knobs-right-box">
+                        <div class="knob-container">
+                            <div class='toggle' id="toggle4">
+                                <div class='toggle-text-off'>OFF</div>
+                                <div class='glow-comp'></div>
+                                <div class='toggle-button'></div>
+                                <div class='toggle-text-on'>ON</div>
+                            </div>
+                            <span>Pipeline <br>reg info</span>
+                        </div>
+                        <div class="knob-container">
+                            <div class='toggle' id="toggle6">
+                                <div class='toggle-text-off'>OFF</div>
+                                <div class='glow-comp'></div>
+                                <div class='toggle-button'></div>
