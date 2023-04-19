@@ -800,3 +800,201 @@ function print_ins(obj) {
     let s = obj.op + " " + "x" + obj.rs2 + " " + obj.imm + "(x" + obj.rs1 + ")";
     return s;
   }
+  if (
+    op == "beq" ||
+    op == "bne" ||
+    op == "blt" ||
+    op == "bge" ||
+    op == "bltu" ||
+    op == "bgeu"
+  ) {
+    let s = obj.op + " " + "x" + obj.rs1 + " " + "x" + obj.rs2 + " " + obj.imm;
+    return s;
+  }
+
+  if (op == "jal" || op == "jalr") {
+    let s = obj.op + " x" + obj.rd + " " + obj.imm;
+    return s;
+  }
+  if (op == "lui" || op == "auipc") {
+    let s = obj.op + " x" + obj.rd + " " + obj.imm;
+    return s;
+  }
+  if (op == "ecall" || op == "ebreak") {
+    let s = op;
+    return s;
+  }
+}
+
+function cycles(op) {
+  let operations = new Array(5);
+  operations.fill(1);
+  operations[3] = 0;
+  if (
+    op === "lw" ||
+    op === "lh" ||
+    op === "lb" ||
+    op === "lhu" ||
+    op === "lbu" ||
+    op === "sh" ||
+    op === "sw" ||
+    op === "sb"
+  )
+    operations[3] = 1;
+  if (op === "sb" || op === "sw" || op === "sh" || op[0] === "b")
+    operations[4] = 0;
+  return operations;
+}
+
+function RFSync(rf, format) {
+  if(INSTRUCTION > Custom_instruction) not_update_register = 1;
+  if(not_update_register == 1) return;
+  if(knobs.rf_knob == false) return;
+  switch (format) {
+    case "hex":
+      document.querySelector(".dropbtn").textContent = "Hexadecimal";
+      break;
+    case "dec":
+      document.querySelector(".dropbtn").textContent = "Decimal";
+      break;
+    case "udec":
+      document.querySelector(".dropbtn").textContent = "Unsigned Decimal";
+  }
+
+  let registerFile = document.querySelectorAll(".register-value");
+  for (let i = 1; i < registerFile.length; i++) {
+    let value = rf[i - 1];
+    value = value < 0 ? value + (0xffffffff + 1) : value;
+    // console.log(value); 
+    if (format === "hex") value = value.toString(16);
+    else if (format === "dec") value &= 0xffffffff;
+    registerFile[i].textContent = `${format === "hex" ? "0x" : ""}${value}`;
+  }
+}
+
+function timelineAppendRow(cycle, row) {
+  // cycle is value of current cycle number
+  // row is an array of size 5 containing 5 numbers which represent the instruction number being executed
+  // row value 0 means stall
+  cycleDiv = document.createElement("div");
+  cycleDiv.className = "timeline-cell";
+  cycleDiv.innerHTML = cycle;
+  document.getElementById("cycle").appendChild(cycleDiv);
+  let timelineHeaderId = [
+    "fetch",
+    "decode",
+    "execute",
+    "memoryaccess",
+    "writeback",
+  ];
+  for (let i = 0; i < row.length; i++) {
+    let timelineCellDiv = document.createElement("div");
+    timelineCellDiv.className = "timeline-cell";
+    if (row[i] != 0) {
+      timelineCellDiv.innerHTML = row[i];
+    } else {
+      let stallDiv = document.createElement("div");
+      stallDiv.className = "stall";
+      timelineCellDiv.appendChild(stallDiv);
+    }
+    let container = document.getElementById(timelineHeaderId[i]);
+    container.appendChild(timelineCellDiv);
+    // Bringing this cellDiv parent to view
+    ensureInViewHor(container.parentElement, timelineCellDiv);
+  }
+}
+// for (let i = 1; i < 3; i++) {
+//     timelineAppendRow(i, [i, i, (i%7!=0)+i, (i%7==0)+i, i&1]);
+// }
+function register_update(register_file) {
+  let type = document.getElementsByClassName("dropbtn")[0].innerText;
+  for (let i = 1; i < 32; i++) {
+    if (type == "Hexadecimal") {
+      document.getElementById("register-x" + i).innerText =
+        "0x" + register_file[i].toString(16);
+    } else if (type == "Decimal") {
+      document.getElementById("register-x" + i).innerText = register_file[i];
+    } else if (type == "Unsigned") {
+      if (register_file[i] < 0) register_file[i] = register_file[i];
+      document.getElementById("register-x" + i).innerText = register_file[i];
+    }
+  }
+}
+// var cnt = 1;
+// var intervalId = setInterval(() => {
+//   let i = cnt;
+
+//   timelineAppendRow(i, [i, i, (i%7!=0)+i, (i%7==0)+i, i&1]);
+//   cnt++;
+//   if (cnt == 1) {  // rows to generate
+//     clearInterval(intervalId);
+//   }
+// }, 0);  // time in milisec
+
+class Simulator {
+  constructor() {
+    this.DONE = 0;
+    this.CYCLE = 0; // Cycle number
+    this.PC = 0; // Program counter
+    this.INSTRUCTION = ""; // Stores current instruction from Fetch
+    this.RF = new Array(32); // Register file
+    this.RF.fill(0);
+    this.OP = ""; // Stores operator decoded from Decode
+    this.RS1 = 0; // 0 to 31 for each register
+    this.RS2 = 0; // 0 to 31 for each register
+    this.RD = 0; // 0 to 31 for each register
+    this.IMM = 0; // Stores immediate value
+    this.ALURESULT = 0; // Stores result of ALU or Memory value
+    this.MEMORY = {};
+    this.RF[2] = 2147483632;
+    this.pc = new Array(5);
+    this.pc.fill(-1);
+    // Now creating Instruction div elements
+    for (let i = 0; i < instList.length; i++) {
+      // console.log(i);
+      let pc_inst = instList[i].split(" ")[0].replace("0x", "");
+      let a_inst = instList[i].split(" ")[1].replace("0x", "");
+      let instructionDiv = document.createElement("div");
+      instructionDiv.className = "instruction-row";
+      instructionDiv.innerHTML = `<div class="instruction-addr">0x${pc_inst}</div>
+            <div class="instruction-hex">0x${a_inst}</div>
+            <div class="instruction-decoded" id="instruction-rowd-${i}">---</div>`;
+      document
+        .getElementsByClassName("instructions")[0]
+        .appendChild(instructionDiv);
+    }
+
+    // Now creating Timeline div elements
+
+    // Now creating register div elements
+    document
+      .getElementById("register")
+      .getElementsByClassName("register-container")[0].innerHTML = "";
+    for (let i = 0; i < 32; i++) {
+      let registerDiv = document.createElement("div");
+      registerDiv.className = "register-row";
+      registerDiv.innerHTML = `<div class="register-name">x${i}</div>
+          <div class="register-value" id="register-x${i}">${this.RF[i]}</div>`;
+      document
+        .getElementById("register")
+        .getElementsByClassName("register-container")[0]
+        .appendChild(registerDiv);
+    }
+
+    // Now creating memory div elements
+    document
+      .getElementById("memory")
+      .getElementsByClassName("memory-container")[0].innerHTML = "";
+    for (let i = 0; i < 10; i++) {
+      let memoryDiv = document.createElement("div");
+      memoryDiv.className = "memory-row";
+      memoryDiv.id = `memory-row-${i}`;
+      memoryDiv.innerHTML = `<div class="memory-address"></div>
+          <div class="memory-value">
+              <div class="memory-cell"></div>
+              <div class="memory-cell"></div>
+              <div class="memory-cell"></div>
+              <div class="memory-cell"></div>
+          </div>`;
+      document
+        .getElementById("memory")
