@@ -1198,3 +1198,227 @@ class Simulator {
         else this.PC += 1;
         break;
       case "bltu":
+        Control_instructions++;
+        rs1 = rs1 < 0 ? 0xffffffff - 1 - rs1 : rs1;
+        rs2 = rs2 < 0 ? 0xffffffff - 1 - rs2 : rs2;
+        if (rs1 < rs2) this.PC += (imm >> 2);
+        else this.PC += 1;
+        break;
+      case "bgeu":
+        Control_instructions++;
+        rs1 = rs1 < 0 ? 0xffffffff - 1 - rs1 : rs1;
+        rs2 = rs2 < 0 ? 0xffffffff - 1 - rs2 : rs2;
+        if (rs1 >= rs2) this.PC += (imm >> 2);
+        else this.PC += 1;
+        break;
+      case "jal":
+        Control_instructions++;
+        this.ALURESULT = 4 * (this.PC + 1);
+        this.PC += (imm >> 2);
+        break;
+      case "jalr":
+        Control_instructions++;
+        this.ALURESULT = 4 * (this.PC + 1);
+        this.PC = (rs1 >> 2) + (imm >> 2);
+        break;
+      case "lui":
+        ALU_instructions++;
+        this.ALURESULT = imm << 12;
+        break;
+      case "auipc":
+        this.ALURESULT = 4 * this.PC + (imm << 12);
+        break;
+      default:
+        console.error("Error");
+        break;
+    }
+    if (this.OP[0] != "b" && this.OP[0] != "j") this.PC += 1;
+    // console.log(this.ALURESULT);
+  }
+
+  memoryAccess() {
+    // console.log("HEOEJ\n");
+    function numberToHexString(number) {
+      let hexString = (
+        number < 0 ? number + (0xffffffff + 1) : number
+      ).toString(16);
+      while (hexString.length < 8) hexString = "0" + hexString;
+      return hexString;
+    }
+    let address = this.ALURESULT;
+    if (this.OP[0] === "s") {
+      let hexNum = numberToHexString(this.RF[this.RS2]);
+      this.MEMORY[address] = hexNum[6] + hexNum[7];
+      switch (this.OP[1]) {
+        case "w":
+          this.MEMORY[address + 2] = hexNum[2] + hexNum[3];
+          this.MEMORY[address + 3] = hexNum[0] + hexNum[1];
+        case "h":
+          this.MEMORY[address + 1] = hexNum[4] + hexNum[5];
+      }
+      // console.log(
+      //   this.MEMORY[address] +
+      //     this.MEMORY[address + 1] +
+      //     this.MEMORY[address + 2] +
+      //     this.MEMORY[address + 3]
+      // );
+      let type = document.getElementsByClassName("dropbtn")[0].innerText;
+      let numberFormat = "hex";
+      if (type === "Unsigned Decimal") numberFormat = "udec";
+      if (type === "Decimal") numberFormat = "dec";
+      memSync(this.MEMORY, numberFormat);
+    } else if (this.OP[0] === "l") {
+      let hexNum = "";
+      switch (this.OP[1]) {
+        case "w":
+          hexNum +=
+            (this.MEMORY[address + 3] === undefined
+              ? "00"
+              : this.MEMORY[address + 3]) +
+            (this.MEMORY[address + 2] === undefined
+              ? "00"
+              : this.MEMORY[address + 2]);
+        case "h":
+          hexNum +=
+            this.MEMORY[address + 1] === undefined
+              ? "00"
+              : this.MEMORY[address + 1];
+        default:
+          hexNum +=
+            this.MEMORY[address] === undefined ? "00" : this.MEMORY[address];
+      }
+      let decimalNumber = parseInt(hexNum, 16);
+      if (this.OP[2] == "u") {
+        switch (this.OP[1]) {
+          case "b":
+            if (decimalNumber & 0x80) decimalNumber -= 0xff + 1;
+          case "h":
+            if (decimalNumber & 0x8000) decimalNumber -= 0xffff + 1;
+          case "w":
+            if (decimalNumber & 0x80000000) decimalNumber -= 0xffffffff + 1;
+        }
+      }
+      this.ALURESULT = decimalNumber;
+    }
+  }
+
+  writeBack() {
+    if (Number(this.RD) !== 0) this.RF[this.RD] = this.ALURESULT;
+  }
+}
+
+var simulator = new Simulator();
+RFSync(simulator.RF, "hex");
+
+document.querySelector(".step").addEventListener("click", () => {
+  if (wrong_code) {
+  } else if (filechoosen) {
+    simulator.step();
+  } else {
+    alert("!Please choose a file");
+  }
+});
+document.querySelector(".run").addEventListener("click", () => {
+  let time_delay = 500 - 5 * document.querySelector("#speed").value;
+  if (filechoosen) {
+    let currentInterval = setInterval(function () {
+      if (wrong_code) {
+      }
+      simulator.step();
+      if (simulator.DONE) {
+        clearInterval(currentInterval);
+      }
+    }, time_delay);
+  } else {
+    alert("!Please choose a file");
+  }
+});
+document.querySelector(".reset").addEventListener("click", () => {
+  location.reload(true);
+});
+
+document
+  .querySelector("#thefile")
+  .addEventListener("change", async function (e) {
+    var file = e.target.files[0];
+    var reader = new FileReader();
+    reader.onload = function (e) {
+      inputString = e.target.result;
+
+      inputStringParser();
+      filechoosen = true;
+      // Creating new simulator object.
+      if(knobs.pipeline_knob) {
+        // console.log("PipelineSimulator");
+        simulator = new PipelineSimulator();
+      }
+      else {
+        // console.log("Simulator");
+        simulator = new Simulator();
+      }
+      RFSync(simulator.RF, "hex");
+    };
+    reader.readAsText(file);
+  });
+
+let rowsCreated = 10;
+function addRow() {
+  // document.getElementById("memory").getElementsByClassName("memory-container")[0].innerHTML = "";
+  let memoryDiv = document.createElement("div");
+  memoryDiv.className = "memory-row";
+  memoryDiv.id = `memory-row-${rowsCreated}`;
+  memoryDiv.innerHTML = `<div class="memory-address"></div>
+    <div class="memory-value">
+        <div class="memory-cell"></div>
+        <div class="memory-cell"></div>
+        <div class="memory-cell"></div>
+        <div class="memory-cell"></div>
+    </div>`;
+  document
+    .getElementById("memory")
+    .getElementsByClassName("memory-container")[0]
+    .appendChild(memoryDiv);
+}
+
+function memSync(memory, format) {
+  function numberToHexString(number) {
+    let hexString = (number < 0 ? number + (0xffffffff + 1) : number).toString(
+      16
+    );
+    while (hexString.length < 8) hexString = "0" + hexString;
+    return hexString;
+  }
+  let lastAccess = -1;
+  let memoryLocations = document.querySelectorAll(".memory-cell");
+  let rowWritten = 0;
+  for (let address in memory) {
+    let value = memory[address];
+    if (format[0] !== "h") value = parseInt(value, 16);
+    if (format[0] === "u" && value & 0x80) value -= 0xff + 1;
+
+    if (address >> 2 === lastAccess) {
+      memoryLocations[4 * rowWritten + (address % 4)].textContent = value;
+    } else {
+      lastAccess = address >> 2;
+      if (rowsCreated - rowWritten < 2) {
+        addRow();
+        rowsCreated++;
+      }
+      rowWritten++;
+      for (let i = 0; i < 4; i++)
+        if (memoryLocations[4 * rowWritten + i].textContent === "")
+          memoryLocations[4 * rowWritten + i].textContent =
+            format === "hex" ? "00" : "0";
+      let memoryAddress = document.querySelectorAll(".memory-address");
+      memoryAddress[rowWritten].textContent =
+        "0x" + numberToHexString(address - (address % 4));
+      memoryLocations[4 * rowWritten + (address % 4)].textContent = value;
+    }
+  }
+}
+
+
+
+
+
+
