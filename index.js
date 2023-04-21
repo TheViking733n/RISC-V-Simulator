@@ -998,3 +998,203 @@ class Simulator {
           </div>`;
       document
         .getElementById("memory")
+        .getElementsByClassName("memory-container")[0]
+        .appendChild(memoryDiv);
+    }
+
+    document.querySelector("#but-hex").addEventListener("click", function () {
+      RFSync(simulator.RF, "hex");
+      memSync(simulator.MEMORY, "hex");
+    });
+    document.querySelector("#but-dec").addEventListener("click", function () {
+      RFSync(simulator.RF, "dec");
+      memSync(simulator.MEMORY, "dec");
+    });
+    document.querySelector("#but-udec").addEventListener("click", function () {
+      RFSync(simulator.RF, "udec");
+      memSync(simulator.MEMORY, "udec");
+    });
+  }
+
+
+  step() {
+    this.fetch();
+    if (this.DONE) return;
+    this.decode();
+    let oper = new Array(5);
+    if (this.OP == "error") {
+      alert("!Wrong code.");
+      wrong_code = true;
+      location.reload();
+    }
+    oper = cycles(this.OP);
+    let obj2 = decode2(this.INSTRUCTION);
+    let ins_to_print = print_ins(obj2);
+    // document.getElementById("instruction-rowd-" + this.PC).innerText =  ins_to_print;
+    displayDecodedInstructionAndHazard(this.PC, ins_to_print, "ok")
+    // Keywords to pass for different types of hazards
+    // "data" -> data hazard; "control" -> Control hazard; otherwise no hazard
+
+    for (let i = 0; i < oper.length; i++) oper[i] *= this.PC + 1;
+    timelineAppendRow(this.CYCLE + 1, oper);
+    INSTRUCTION++;    
+    this.execute();
+    // console.log("Hi\n");
+    if (oper[3] != 0) { this.memoryAccess();}
+    if (oper[4] != 0) {this.writeBack();}
+    let type = document.getElementsByClassName("dropbtn")[0].innerText;
+    // console.log(type);
+    let numberFormat = "hex";
+    if (type === "Unsigned Decimal") numberFormat = "udec";
+    if (type === "Decimal") numberFormat = "dec";
+    RFSync(this.RF, numberFormat);
+    this.CYCLE += 1;
+    // document.querySelector(".cycle-count").innerHTML = this.CYCLE;
+    CYCLE = this.CYCLE;
+    updateStats();
+    if (this.CYCLE > 10000) {
+      wrong_code = true;
+      alert("Infinite loop");
+      location.reload();
+    }
+  }
+
+
+
+
+
+  fetch() {
+    if (this.PC >= instList.length) {
+      this.DONE = 1;
+    }
+    if (!this.DONE) {
+      this.INSTRUCTION = instList[this.PC].split(" ")[1];
+    }
+  }
+  decode() {
+    let obj = decode2(this.INSTRUCTION);
+    // console.log(obj);
+    this.IMM = obj.imm;
+    this.OP = obj.op;
+    this.RS1 = obj.rs1;
+    this.RS2 = obj.rs2;
+    this.RD = obj.rd;
+  }
+    execute() {
+    let rs1 = Math.round(this.RF[Math.round(this.RS1)]);
+    let rs2 = Math.round(this.RF[Math.round(this.RS2)]);
+    let imm = Math.round(this.IMM);
+    switch (this.OP) {
+      case "add":
+        ALU_instructions++;
+        this.ALURESULT = rs1 + rs2;
+        break;
+      case "sub":
+        ALU_instructions++;
+        this.ALURESULT = rs1 - rs2;
+        break;
+      case "xor":
+        ALU_instructions++;
+        this.ALURESULT = rs1 ^ rs2;
+        break;
+      case "or":
+        ALU_instructions++;
+        this.ALURESULT = rs1 | rs2;
+        break;
+      case "and":
+        ALU_instructions++;
+        this.ALURESULT = rs1 & rs2;
+        break;
+      case "sll":
+        ALU_instructions++;
+        this.ALURESULT = rs1 << rs2;
+        break;
+      case "srl":
+        ALU_instructions++;
+        this.ALURESULT = rs1 >>> rs2;
+        break;
+      case "sra":
+        ALU_instructions++;
+        this.ALURESULT = rs1 >> rs2;
+        break;
+      case "slt":
+        ALU_instructions++;
+        this.ALURESULT = rs1 < rs2 ? 1 : 0;
+        break;
+      case "sltu":
+        ALU_instructions++;
+        rs1 = rs1 < 0 ? 0xffffffff - 1 - rs1 : rs1;
+        rs2 = rs2 < 0 ? 0xffffffff - 1 - rs2 : rs2;
+        if (rs1 < rs2) this.ALURESULT = 1;
+        else this.ALURESULT = 0;
+        break;
+      case "addi":
+        ALU_instructions++;
+        this.ALURESULT = rs1 + imm;
+        break;
+      case "xori":
+        this.ALURESULT = rs1 ^ imm;
+        break;
+      case "ori":
+        ALU_instructions++;
+        this.ALURESULT = rs1 | imm;
+        break;
+      case "andi":
+        ALU_instructions++;
+        this.ALURESULT = rs1 & imm;
+        break;
+      case "slli":
+        ALU_instructions++;
+        this.ALURESULT = rs1 << imm;
+        break;
+      case "srli":
+        ALU_instructions++;
+        this.ALURESULT = rs1 >> imm;
+        break;
+      case "srai":
+        ALU_instructions++;
+        this.ALURESULT = rs1 >> imm;
+        break;
+      case "slti":
+        ALU_instructions++;
+        this.ALURESULT = rs1 < imm ? 1 : 0;
+        break;
+      case "sltiu":
+        ALU_instructions++;
+        rs1 = rs1 < 0 ? 0xffffffff - 1 - rs1 : rs1;
+        imm = imm < 0 ? 0xffffffff - 1 - imm : imm;
+        if (rs1 < imm) this.ALURESULT = 1;
+        else this.ALURESULT = 0;
+        break;
+      case "lb":
+      case "lh":
+      case "lw":
+      case "lbu":
+      case "lhu":
+      case "sb":
+      case "sh":
+      case "sw":
+        Data_transfer_instructions++;
+        this.ALURESULT = rs1 + imm;
+        break;
+      case "beq":
+        Control_instructions++;
+        if (rs1 == rs2) this.PC += (imm >> 2);
+        else this.PC += 1;
+        break;
+      case "bne":
+        Control_instructions++;
+        if (rs1 != rs2) this.PC += (imm >> 2);
+        else this.PC += 1;
+        break;
+      case "blt":
+        Control_instructions++;
+        if (rs1 < rs2) this.PC += (imm >> 2);
+        else this.PC += 1;
+        break;
+      case "bge":
+        Control_instructions++;
+        if (rs1 >= rs2) this.PC += (imm >> 2);
+        else this.PC += 1;
+        break;
+      case "bltu":
