@@ -1422,3 +1422,177 @@ function memSync(memory, format) {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+function dependency(a, b, c, d){
+  if(a < 0) return 0;
+  let inst1 = decode2(a>=0?instList[a].split(" ")[1]:"00000033");
+  let inst2 = decode2(b>=0?instList[b].split(" ")[1]:"00000033");
+  let inst3 = decode2(c>=0?instList[c].split(" ")[1]:"00000033");
+  let inst4 = decode2(d>=0?instList[d].split(" ")[1]:"00000033");
+  // console.log(inst1);
+  // console.log(inst2);
+  if(inst1.rs1 === inst2.rd && inst2.rd !== 0) return 1;
+  if(inst1.rs2 === inst2.rd && inst2.rd !== 0) return 2;
+  if(inst1.rs1 === inst3.rd && inst3.rd !== 0) return 1;
+  if(inst1.rs2 === inst3.rd && inst3.rd !== 0) return 2;
+  if(inst1.rs1 === inst4.rd && inst4.rd !== 0) return 1;
+  if(inst1.rs2 === inst4.rd && inst4.rd !== 0) return 2;
+  return 0;
+}
+
+
+function forwardingDepencency(b, a){
+  let inst1 = decode2(a>=0?instList[a].split(" ")[1]:"00000033");
+  let inst2 = decode2(b>=0?instList[b].split(" ")[1]:"00000033");
+  if(inst1.op[0]==="l" && inst1.op[1]!=="u")
+      if((inst1.rd  ===  inst2.rs1 || inst1.rd  ===  inst2.rs2) && inst1.rd!==0)
+          return 1;
+  return 0;
+}
+
+
+
+
+
+class set_associative_cache {
+constructor(size, ass, remove_policy) {
+  console.log("asss is ", ass);
+    this.size = size;
+    this.assoc = ass;
+    this.remove_policy = remove_policy;
+    this.curr = 0;
+    this.div = this.size / this.assoc;
+    this.addr={};
+    this.usage={};
+    this.receny=[];
+    this.queue=new Array(this.div).fill(0);
+    this.array = new Array(this.div);
+    for (let i = 0; i < this.div; i++) {
+        this.array[i] = new Array();
+        this.receny[i] = new Array();
+    }
+}
+
+cache_sync(type, format) {
+  function numberToHexString(number) {
+    let hexString = (number < 0 ? number + (0xffffffff + 1) : number).toString(
+      16
+    );
+    while (hexString.length < 8) hexString = "0" + hexString;
+    return hexString;
+  }
+  let lastAccess = -1;
+  let cache_type_int = 0;
+  if(type==='icache') cache_type_int = 1;
+  let cache_class = cache_type_int?".icache-cell":".dcache-cell";
+  let cacheLocations = document.querySelectorAll(cache_class);
+  let rowWritten = 0;
+  let rowsCreated = icache_rows;
+  if(type===1) rowsCreated = dcache_rows;
+  let block_size = cache_type_int?icache_block:dcache_block;
+  let cache = {};
+  let cache_memory = cache_type_int?"INST_MEMORY":"MEMORY";
+  
+  // if(cache_type_int===1){
+  // for(let i=0; i<this.array.length; i++)
+  //   for(let j=0; j<this.array[i].length; j++)
+  //       for(let k=0; k<block_size/4; k++)
+  //         for(let l=0; l<4; l++);
+  //           cache[j*block_size+k] = simulator[cache_memory][j*block_size+k];
+
+  // }
+  // else{
+    if(cache_type_int===1)
+    {
+      for(let i=0; i<this.array.length; i++)
+        for(let j=0; j<this.array[i].length; j++)
+            for(let k=0; k<block_size; k++)
+                cache[parseInt(this.array[i])*block_size+k] = simulator[cache_memory][parseInt(this.array[i])*block_size+k];
+    }
+    else{
+      for(let i=0; i<this.array.length; i++)
+        for(let j=0; j<this.array[i].length; j++)
+            for(let k=0; k<block_size; k++)
+                cache[parseInt(this.array[i])+k] = simulator[cache_memory][parseInt(this.array[i])+k];
+    }
+// 
+  // }
+
+  
+          
+    console.log(cache);
+    
+    for (let address in cache) {
+        let value = cache[address];
+        if(value===undefined)
+        {
+            // console.error("block overflow");
+            value=0;
+        }
+        if (format[0] !== "h") value = parseInt(value, 16);
+        if (format[0] === "u" && value & 0x80) value -= 0xff + 1;
+
+        if (address >> 2 === lastAccess) {
+            cacheLocations[4 * rowWritten + (address % 4)].textContent = value;
+        } else {
+            lastAccess = address >> 2;
+            if (rowsCreated - rowWritten < 2) {
+            if(cache_type_int===1)
+              this.addInstCacheRow();
+            else
+              this.addDataCacheRow();
+            }
+            rowWritten++;
+            for (let i = 0; i < 4; i++)
+            if (cacheLocations[4 * rowWritten + i].textContent === "")
+                cacheLocations[4 * rowWritten + i].textContent =
+                format === "hex" ? "00" : "0";
+            let cache_type_address = cache_type_int?".icache-address":".dcache-address";
+            let cacheaddress = document.querySelectorAll(cache_type_address);
+            cacheaddress[rowWritten].textContent =
+            "0x" + numberToHexString(address - (address % 4));
+            cacheLocations[4 * rowWritten + (address % 4)].textContent = value;
+    }
+  }
+}
+
+
+
+
+
+addInstCacheRow() {
+    icache_rows++;
+  // document.getElementById("memory").getElementsByClassName("memory-container")[0].innerHTML = "";
+  let memoryDiv = document.createElement("div");
+  memoryDiv.className = "icache-row";
+  memoryDiv.id = `icache-row-${rowsCreated}`;
+  memoryDiv.innerHTML = `<div class="icache-address"></div>
+    <div class="icache-value">
+        <div class="icache-cell"></div>
+        <div class="icache-cell"></div>
+        <div class="icache-cell"></div>
+        <div class="icache-cell"></div>
+    </div>`;
+  document
+    .getElementById("icache")
+    .getElementsByClassName("icache-container")[0]
+    .appendChild(memoryDiv);
+}
