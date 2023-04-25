@@ -1998,3 +1998,203 @@ class PipelineSimulator {
       // console.log("HDFHUEDFHUIHSDGIHDSIPHF\n");
       if(dependency(this.pc[2], this.pc[3], -1, -1) == 1) rs1 = this.ALURESULT[this.pc[3]]
       else {
+            // console.log("hello\n");
+            rs2 = this.ALURESULT[this.pc[3]];
+            // console.log(rs2);
+            // console.log(this.pc[2]);
+            // console.log(this.pc[3])
+          }  
+    }      
+
+
+    // console.log(rs2);
+    let imm = Math.round(this.IMM[this.pc[2]]);
+    let dum;
+    let flag = 0;
+    // console.log(this.pc[2] + "    " +  this.OP[this.pc[2]]);  
+    switch (this.OP[this.pc[2]]) {
+      case "add":
+        ALU_instructions++;
+        this.ALURESULT[this.pc[2]] = rs1 + rs2;
+        break;
+      case "sub":
+        ALU_instructions++;
+        this.ALURESULT[this.pc[2]] = rs1 - rs2;
+        break;
+      case "xor":
+        ALU_instructions++;
+        this.ALURESULT[this.pc[2]] = rs1 ^ rs2;
+        break;
+      case "or":
+        ALU_instructions++;
+        this.ALURESULT[this.pc[2]] = rs1 | rs2;
+        break;
+      case "and":
+        ALU_instructions++;
+        this.ALURESULT[this.pc[2]] = rs1 & rs2;
+        break;
+      case "sll":
+        ALU_instructions++;
+        this.ALURESULT[this.pc[2]] = rs1 << rs2;
+        break;
+      case "srl":
+        ALU_instructions++;
+        this.ALURESULT[this.pc[2]] = rs1 >>> rs2;
+        break;
+      case "sra":
+        ALU_instructions++;
+        this.ALURESULT[this.pc[2]] = rs1 >> rs2;
+        break;
+      case "slt":
+        ALU_instructions++;
+        this.ALURESULT[this.pc[2]] = rs1 < rs2 ? 1 : 0;
+        break;
+      case "sltu":
+        ALU_instructions++;
+        rs1 = rs1 < 0 ? 0xffffffff - 1 - rs1 : rs1;
+        rs2 = rs2 < 0 ? 0xffffffff - 1 - rs2 : rs2;
+        if (rs1 < rs2) this.ALURESULT[this.pc[2]] = 1;
+        else this.ALURESULT[this.pc[2]] = 0;
+        break;
+      case "addi":
+        ALU_instructions++;
+        this.ALURESULT[this.pc[2]] = rs1 + imm;
+        break;
+      case "xori":
+        ALU_instructions++;
+        this.ALURESULT[this.pc[2]] = rs1 ^ imm;
+        break;
+      case "ori":
+        ALU_instructions++;
+        this.ALURESULT[this.pc[2]] = rs1 | imm;
+        break;
+      case "andi":
+        ALU_instructions++;
+        this.ALURESULT[this.pc[2]] = rs1 & imm;
+        break;
+      case "slli":
+        ALU_instructions++;
+        this.ALURESULT[this.pc[2]] = rs1 << imm;
+        break;
+      case "srli":
+        ALU_instructions++;
+        this.ALURESULT[this.pc[2]] = rs1 >> imm;
+        break;
+      case "srai":
+        ALU_instructions++;
+        this.ALURESULT[this.pc[2]] = rs1 >> imm;
+        break;
+      case "slti":
+        ALU_instructions++;
+        this.ALURESULT[this.pc[2]] = rs1 < imm ? 1 : 0;
+        break;
+      case "sltiu":
+        ALU_instructions++;
+        rs1 = rs1 < 0 ? 0xffffffff - 1 - rs1 : rs1;
+        imm = imm < 0 ? 0xffffffff - 1 - imm : imm;
+        if (rs1 < imm) this.ALURESULT[this.pc[2]] = 1;
+        else this.ALURESULT[this.pc[2]] = 0;
+        break;
+      case "lb":
+      case "lh":
+      case "lw":
+      case "lbu":
+      case "lhu":
+      case "sb":
+      case "sh":
+      case "sw":
+        Data_transfer_instructions++;
+        this.ALURESULT[this.pc[2]] = rs1 + imm;
+        break;
+      case "beq":
+        Control_instructions++;
+        if (rs1 == rs2) dum = this.pc[2] + (imm >> 2);
+        else dum = this.pc[2] + 1;
+        if(dum == this.BTB[this.pc[2]]);
+        else{
+          flag = 1;
+          this.BTB[this.pc[2]] = dum; 
+          this.PC = dum;
+        }  
+        return flag;
+        break;
+      case "bne":
+        Control_instructions++;
+        if (rs1 != rs2) dum = this.pc[2] + (imm >> 2);
+        else dum = this.pc[2] + 1;
+        if(dum == this.BTB[this.pc[2]]) ;
+        else{
+          this.BTB[this.pc[2]] = dum; 
+          this.PC = dum;
+          flag = 1;
+        }  
+        return flag;
+        break;
+      case "blt":
+        Control_instructions++;
+        if (rs1 < rs2){ dum = this.pc[2] + imm/4;}
+        else dum = this.pc[2] + 1;
+        if(dum == this.BTB[this.pc[2]]);
+        else{
+          flag = 1;
+          this.BTB[this.pc[2]] = dum; 
+          this.PC = dum;
+        }  
+        return flag;
+        break;
+      case "bge":
+        Control_instructions++;
+        // console.log(this.pc[2] + "       " + imm);
+        if (rs1 >= rs2) dum = this.pc[2] + imm/4;
+        else dum = this.pc[2] + 1;
+        // console.log("         " + dum);
+        if(dum == this.BTB[this.pc[2]]);
+        else{
+          flag = 1;
+          this.BTB[this.pc[2]] = dum; 
+          this.PC = dum;
+        }  
+        // console.log("Value of flag - "+flag);
+        return flag;
+        break;
+      case "bltu":
+        Control_instructions++;
+        rs1 = rs1 < 0 ? 0xffffffff - 1 - rs1 : rs1;
+        rs2 = rs2 < 0 ? 0xffffffff - 1 - rs2 : rs2;
+        if (rs1 < rs2) dum = this.pc[2] + imm/4;
+        else dum = this.pc[2] + 1;
+        if(dum == this.BTB[this.pc[2]]) ;
+        else{
+          flag = 1;
+          this.BTB[this.pc[2]] = dum; 
+          this.PC = dum;
+        }  
+        return flag;
+        break;
+      case "bgeu":
+        Control_instructions++;
+        rs1 = rs1 < 0 ? 0xffffffff - 1 - rs1 : rs1;
+        rs2 = rs2 < 0 ? 0xffffffff - 1 - rs2 : rs2;
+        if (rs1 > rs2) dum = this.pc[2] + (imm >> 2);
+        else dum = this.pc[2] + 1;
+        if(dum == this.BTB[this.pc[2]]) ;
+        else{
+          flag = 1;
+          this.BTB[this.pc[2]] = dum; 
+          this.PC = dum;
+        }  
+        return flag;
+        break;
+      case "jal":
+        Control_instructions++;
+        this.ALURESULT[this.pc[2]] = 4 * (this.pc[2] + 1);
+        dum = this.pc[2] + (imm >> 2);
+        if(dum == this.BTB[this.pc[2]]) ;
+        else{
+          flag = 1;
+          this.BTB[this.pc[2]] = dum;
+          this.PC = dum;
+        }  
+        return flag;
+        break;
+      case "jalr":
