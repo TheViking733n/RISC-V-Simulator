@@ -2198,3 +2198,142 @@ class PipelineSimulator {
         return flag;
         break;
       case "jalr":
+        Control_instructions++;
+        this.ALURESULT[this.pc[2]] = 4 * (this.pc[2] + 1);
+        dum = (rs1 >> 2) + (imm >> 2);
+        if(dum == this.BTB[this.pc[2]]) ;
+        else{
+          flag = 1;
+          this.BTB[this.pc[2]] = dum;
+          this.PC = dum;
+        }  
+        return flag;
+        break;
+      case "lui":
+        ALU_instructions++;
+        this.ALURESULT[this.pc[2]] = imm << 12;
+        break;
+      case "auipc":
+        this.ALURESULT[this.pc[2]] = 4 * this.PC + (imm << 12);
+        break;
+      default:
+        console.error("Error");
+        break;
+    }    
+    // if (this.OP[0] != "b" && this.OP[0] != "j") this.PC += 1;
+    if(knobs.pipeline_info_knob)
+    console.log(this.ALURESULT[this.pc[2]]);
+  }  
+  
+  memoryAccess() {
+    function numberToHexString(number) {
+      let hexString = (
+        number < 0 ? number + (0xffffffff + 1) : number
+        ).toString(16);
+        while (hexString.length < 8) hexString = "0" + hexString;
+        return hexString;
+      }  
+      let address = this.ALURESULT[this.pc[3]];
+      // console.log(address);
+      let hit = 1;
+    if (this.OP[this.pc[3]][0] === "s") {
+      let hexNum = numberToHexString(this.RF[this.RS2[this.pc[3]]]);
+      this.MEMORY[address] = hexNum[6] + hexNum[7];
+      switch (this.OP[this.pc[3]][1]) {
+        case "w":
+          this.MEMORY[address + 2] = hexNum[2] + hexNum[3];
+          this.MEMORY[address + 3] = hexNum[0] + hexNum[1];
+        case "h":
+          this.MEMORY[address + 1] = hexNum[4] + hexNum[5];
+      }    
+      // console.log(
+      //   this.MEMORY[address] +  
+      //     this.MEMORY[address + 1] +
+      //     this.MEMORY[address + 2] +
+      //     this.MEMORY[address + 3]
+      // );
+      let type = document.getElementsByClassName("dropbtn")[0].innerText;
+      let numberFormat = "hex";
+      if (type === "Unsigned Decimal") numberFormat = "udec";
+      if (type === "Decimal") numberFormat = "dec";
+      memSync(this.MEMORY, numberFormat);
+    } else if (this.OP[this.pc[3]][0] === "l") {
+      let hexNum = "";
+      switch (this.OP[this.pc[3]][1]) {
+        case "w":
+          hexNum +=
+            (this.MEMORY[address + 3] === undefined
+              ? "00"
+              : this.MEMORY[address + 3]) +
+            (this.MEMORY[address + 2] === undefined
+              ? "00"
+              : this.MEMORY[address + 2]);
+              hit *= this.data_cache.readcache((address+3)-(address+3)%dcache_block)==='miss'?0:1
+              this.data_cache.insert((address+3)-(address+3)%dcache_block)
+              hit *= this.data_cache.readcache((address+2)-(address+2)%dcache_block)==='miss'?0:1
+              this.data_cache.insert((address+2)-(address+2)%dcache_block)
+        case "h":    
+          hexNum +=
+            this.MEMORY[address + 1] === undefined
+              ? "00"
+              : this.MEMORY[address + 1];
+              hit *= this.data_cache.readcache((address+1)-(address+1)%dcache_block)==='miss'?0:1
+            this.data_cache.insert((address+1)-(address+1)%dcache_block)  
+        default:  
+          hexNum +=
+            this.MEMORY[address] === undefined ? "00" : this.MEMORY[address];
+            hit *= this.data_cache.readcache((address)-(address)%dcache_block)==='miss'?0:1
+            this.data_cache.insert((address)-(address)%dcache_block)
+      }      
+      let decimalNumber = parseInt(hexNum, 16);
+      if (this.OP[this.pc[3]][2] == "u") {
+        switch (this.OP[this.pc[3]][1]) {
+          case "b":
+            if (decimalNumber & 0x80) decimalNumber -= 0xff + 1;
+          case "h":
+            if (decimalNumber & 0x8000) decimalNumber -= 0xffff + 1;
+          case "w":
+            if (decimalNumber & 0x80000000) decimalNumber -= 0xffffffff + 1;
+        }    
+      }  
+      this.ALURESULT[this.pc[3]] = decimalNumber;
+      if(hit==1)
+        dcache_hit++;
+      else
+        dcache_miss++;
+    }  
+    this.memoryhit = hit;
+    if(this.stalls_memoryAccess==0)
+    {
+      let type = document.getElementsByClassName("dropbtn")[0].innerText;
+      let numberFormat = "hex";
+      if (type === "Unsigned Decimal") numberFormat = "udec";
+      if (type === "Decimal") numberFormat = "dec";
+      this.data_cache.cache_sync('dcache', numberFormat);
+
+    } 
+  }  
+
+  writeBack() {
+    if (Number(this.RD[this.pc[4]]) !== 0) this.RF[this.RD[this.pc[4]]] = this.ALURESULT[this.pc[4]];
+    if(knobs.pipeline_info_knob)
+    console.log(this.RF[this.RD[this.pc[4]]]);
+  }  
+}  
+
+
+
+
+
+
+
+
+
+
+
+
+document.getElementById("speed").addEventListener("input", function () {
+  document.getElementById("speed-value").innerText = this.value;
+});  
+
+
