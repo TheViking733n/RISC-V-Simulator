@@ -1596,3 +1596,205 @@ addInstCacheRow() {
     .getElementsByClassName("icache-container")[0]
     .appendChild(memoryDiv);
 }
+
+addDataCacheRow() {
+    dcache_rows++;
+    // document.getElementById("memory").getElementsByClassName("memory-container")[0].innerHTML = "";
+    let memoryDiv = document.createElement("div");
+    memoryDiv.className = "dcache-row";
+    memoryDiv.id = `dcache-row-${rowsCreated}`;
+    memoryDiv.innerHTML = `<div class="dcache-address"></div>
+      <div class="dcache-value">
+          <div class="dcache-cell"></div>
+          <div class="dcache-cell"></div>
+          <div class="dcache-cell"></div>
+          <div class="dcache-cell"></div>
+      </div>`;
+    document
+      .getElementById("dcache")
+      .getElementsByClassName("dcache-container")[0]
+      .appendChild(memoryDiv);
+  }
+  
+readcache(addr){
+    if(this.find(addr)=="present")
+    {
+        if(this.usage[addr]==undefined)
+            this.usage[addr]=1;
+        else
+            this.usage[addr]++;
+        return "hit";
+    }
+    else
+        return "miss";
+}
+find(addr)
+{
+    let pos = addr % this.div;
+    for(let i=0;i<this.array[pos].length;i++)
+        if(this.array[pos][i]==addr)
+            return "present";
+    return "not present";
+}
+insert(addr) {
+  if(this.type==='dcache')
+    console.error("1234567890123w4er5tfgyrsedr5gygfdxrtfgyftrgyuhbgcftrgyuh")
+    if(this.find(addr)=="not present"){
+        let pos = addr % this.div;
+        if (this.array[pos].length < this.assoc) {
+            this.array[pos].push(addr);
+            this.usage[addr]=0;
+            for(let i=0; i<this.receny[pos].length; i++)
+                if(this.receny[pos][i]>0)
+                    this.receny[pos][i]--;
+            this.receny[pos][this.receny.length-1] = this.assoc-1;
+            console.log(addr + " is added")
+        }
+        else {
+            let ind=this.remove(this.remove_policy,addr);
+            console.log(this.array[pos][ind] + " is removed")
+            this.array[pos][ind]=addr;
+            this.usage[addr]=0;
+            for(let i=0; i<this.receny[pos].length; i++)
+                if(this.receny[pos][i]>0)
+                    this.receny[pos][i]--;
+            this.receny[pos][ind] = this.assoc-1;
+            console.log(addr + " is added")
+        }
+    }
+    else
+        console.log("already present");
+}
+remove(policy,addr)
+{
+    let pos=addr%this.div;
+    if(policy=="random"){
+        let rn=Math.floor(Math.random()*this.assoc);
+        return rn;
+    }
+    if(policy=="lfu")
+    {
+        let ind=0;
+        let rem=0;
+        for(let i=0;i<this.assoc;i++){
+            if(this.usage[this.array[pos][i]]<=this.usage[this.array[pos][ind]]){
+                ind=rem;
+                rem=i;
+            }
+        }
+        return rem;
+    }
+    if(policy=="fifo"){
+        let rem=this.queue[pos];
+        this.queue[pos]++;
+        return rem%this.assoc;
+    }
+    if(policy==="lru"){
+        for(let i=0; i<this.assoc; i++)
+            if(this.receny[pos][i]===undefined || this.receny[pos][i]===0)
+                return i;
+    }
+}
+}
+
+
+
+
+class PipelineSimulator {
+  constructor() {
+    this.done = 0;
+    this.DONE = 0;
+    this.CYCLE = 0; // Cycle number
+    this.PC = 0; // Program counter
+    this.INSTRUCTION = ""; // Stores current instruction from Fetch
+    this.RF = new Array(32); // Register file
+    this.RF.fill(0);
+    this.OP = new Array(instList.length); // Stores operator decoded from Decode
+    this.RS1 = new Array(instList.length); // 0 to 31 for each register
+    this.RS2 = new Array(instList.length); // 0 to 31 for each register
+    this.RD = new Array(instList.length);// 0 to 31 for each register
+    this.IMM = new Array(instList.length); // Stores immediate value
+    this.ALURESULT = new Array(instList.length); // Stores result of ALU or Memory value
+    this.MEMORY = {};
+    this.INST_MEMORY = {};
+    this.RF[2] = 2147483632;
+    this.pc = new Array(5);
+    this.pc.fill(-1);
+    this.stalls_fetch = 0;
+    this.stalls_memoryAccess = 0;
+    this.fetchhit = 0;
+    this.memoryhit = 0;
+    this.dataHit = 0;
+    this.BTB = new Array(instList.length);
+    for(let i = 0; i<instList.length; i++){
+      this.BTB[i] = i+1;
+    }  
+    
+    for(let i=0; i<instList.length; i++){
+        let hexInst = instList[i].split(' ')[1];
+        for(let j=0; j<4; j++){
+            this.INST_MEMORY[4*i+3-j]=hexInst[2*j]+hexInst[2*j+1];
+        }    
+    }    
+    
+    
+    dcache_assoc=dcache_type==='direct'?1:(dcache_type==='fully'?dcache_size:dcache_assoc)
+    icache_assoc=icache_type==='direct'?1:(icache_type==='fully'?icache_size:icache_assoc)
+    // console.log(dcache_assoc, icache_assoc)
+    this.data_cache = new set_associative_cache(dcache_size, dcache_assoc, cachePolicy);
+    this.instruction_cache = new set_associative_cache(icache_size, icache_assoc, cachePolicy);
+
+    
+
+
+
+    // Now creating Instruction div elements
+    for (let i = 0; i < instList.length; i++) {
+      // console.log(i);
+      let pc_inst = instList[i].split(" ")[0].replace("0x", "");
+      let a_inst = instList[i].split(" ")[1].replace("0x", "");
+      let instructionDiv = document.createElement("div");
+      instructionDiv.className = "instruction-row";
+      instructionDiv.innerHTML = `<div class="instruction-addr">0x${pc_inst}</div>
+            <div class="instruction-hex">0x${a_inst}</div>
+            <div class="instruction-decoded" id="instruction-rowd-${i}">---</div>`;
+      document      
+        .getElementsByClassName("instructions")[0]
+        .appendChild(instructionDiv);
+    }    
+
+    // Now creating Timeline div elements
+
+    // Now creating register div elements
+    document
+      .getElementById("register")
+      .getElementsByClassName("register-container")[0].innerHTML = "";
+    for (let i = 0; i < 32; i++) {
+      let registerDiv = document.createElement("div");
+      registerDiv.className = "register-row";
+      registerDiv.innerHTML = `<div class="register-name">x${i}</div>
+          <div class="register-value" id="register-x${i}">${this.RF[i]}</div>`;
+      document    
+        .getElementById("register")
+        .getElementsByClassName("register-container")[0]
+        .appendChild(registerDiv);
+    }    
+
+    // Now creating memory div elements
+    document
+      .getElementById("memory")
+      .getElementsByClassName("memory-container")[0].innerHTML = "";
+    for (let i = 0; i < 10; i++) {
+      let memoryDiv = document.createElement("div");
+      memoryDiv.className = "memory-row";
+      memoryDiv.id = `memory-row-${i}`;
+      memoryDiv.innerHTML = `<div class="memory-address"></div>
+          <div class="memory-value">
+              <div class="memory-cell"></div>
+              <div class="memory-cell"></div>
+              <div class="memory-cell"></div>
+              <div class="memory-cell"></div>
+          </div>`;    
+      document    
+        .getElementById("memory")
+        .getElementsByClassName("memory-container")[0]
