@@ -1798,3 +1798,203 @@ class PipelineSimulator {
       document    
         .getElementById("memory")
         .getElementsByClassName("memory-container")[0]
+        .appendChild(memoryDiv);
+    }    
+
+    document.querySelector("#but-hex").addEventListener("click", function () {
+      RFSync(simulator.RF, "hex");
+      memSync(simulator.MEMORY, "hex");
+    });  
+    document.querySelector("#but-dec").addEventListener("click", function () {
+      RFSync(simulator.RF, "dec");
+      memSync(simulator.MEMORY, "dec");
+    });  
+    document.querySelector("#but-udec").addEventListener("click", function () {
+      RFSync(simulator.RF, "udec");
+      memSync(simulator.MEMORY, "udec");
+    });  
+  }  
+
+
+
+  step(){
+    this.memoryhit = 1;
+    this.fetchhit = 1;
+    let type = document.getElementsByClassName("dropbtn")[0].innerText;
+    let numberFormat = "hex";
+    if (type === "Unsigned Decimal") numberFormat = "udec";
+    if (type === "Decimal") numberFormat = "dec";
+    // console.log(this.RF);
+    RFSync(this.RF, numberFormat);
+    // memSync();
+    let flag = 0;
+    let flag1 = 0;
+    let flag2 = 0;
+    // console.log(this.pc);
+    if(dependency(this.pc[1], this.pc[2], this.pc[3], this.pc[4]) > 0   && !knobs.data_knob){
+      flag = 1;
+      Data_Hazards++;
+      Data_hazards_stalls++;
+    }
+    if(knobs.data_knob   &&  forwardingDepencency(this.pc[1], this.pc[2])){
+      
+      flag = 1;
+      Data_Hazards++;
+      Data_hazards_stalls++;
+    }
+    for(let i = 4; i>=0; i--){
+      if(this.pc[i] != -1) break;
+      else if(i == 0  && this.PC >= instList.length){
+        this.DONE = 1;
+      }
+    }
+    this.pc[4] = -1;
+    if(this.stalls_memoryAccess <= 0 || !knobs.cache){
+    if(this.pc[3] != -1 && this.pc[4] == -1){
+      this.pc[4] = this.pc[3];
+      this.pc[3] = -1;
+      if(cycles(decode2(instList[this.pc[4]].split(" ")[1]).op)[4] != 0){
+      this.writeBack();
+      }
+    }
+  }
+    if(this.pc[2] != -1 && this.pc[3] == -1){
+      this.pc[3] = this.pc[2];
+      this.pc[2] = -1;
+      if(cycles(decode2(instList[this.pc[3]].split(" ")[1]).op)[3] != 0)
+      {
+        this.memoryAccess();
+      }
+    }
+    if(flag == 0){
+    if(this.pc[1] != -1 && this.pc[2] == -1){
+      this.pc[2] = this.pc[1];
+      this.pc[1] = -1;
+      INSTRUCTION++;
+      if(this.execute() == 1){
+        Control_Hazards++;
+        Control_hazards_stalls += 2;
+        this.pc[1] = -1;
+        this.pc[0] = -1;
+        flag1 = 1;
+      }
+    }
+    if(flag1 == 0){
+      if(this.stalls_fetch <= 0 || !knobs.cache){
+          if(this.pc[0] != -1 && this.pc[1] == -1){
+          this.pc[1] = this.pc[0];
+          this.pc[0] = -1;
+          let obj2 = decode2(instList[this.pc[1]].split(" ")[1]);
+          let ins_to_print = print_ins(obj2);
+          // document.getElementById("instruction-rowd-" + this.pc[1]).innerText =  ins_to_print;
+          displayDecodedInstructionAndHazard(this.pc[1], ins_to_print, "ok");
+          // Keywords to pass for different types of hazards
+          // "data" -> data hazard; "control" -> Control hazard; otherwise no hazard
+  
+          this.decode();
+          if(this.OP[this.pc[1]][0] == 'b'  ||    this.OP[this.pc[1]][0] == 'j'){
+              this.PC = this.BTB[this.pc[1]];
+          }
+          }
+      }
+      if(this.PC < instList.length && this.pc[0] == -1){
+        this.pc[0] = this.PC;
+        // console.log("step");
+        // console.log(this.PC);
+        this.fetch();
+      }
+      
+    }
+  }
+    if(flag == 1  && this.pc[1] != -1){
+      let obj2 = decode2(instList[this.pc[1]].split(" ")[1]);
+        let ins_to_print = print_ins(obj2);
+        displayDecodedInstructionAndHazard(this.pc[1], ins_to_print, "data");
+    }
+    if(flag1 == 1  && this.pc[2] != -1){
+      let obj2 = decode2(instList[this.pc[2]].split(" ")[1]);
+      let ins_to_print = print_ins(obj2);
+      displayDecodedInstructionAndHazard(this.pc[2], ins_to_print, "control");
+    }
+    if(this.stalls_fetch > 0){
+      total_memory_stall++;
+      this.stalls_fetch--;
+    }
+    if(this.stalls_memoryAccess > 0){
+      total_memory_stall++;
+      this.stalls_memoryAccess--;
+    }
+// console.log(this.fetchhit)
+    if(this.stalls_fetch <= 0 && this.fetchhit == 0){
+      this.stalls_fetch = CACHE_STALLS;
+    }
+// console.log(this.stalls_fetch)
+    if(this.stalls_memoryAccess <= 0 && this.memoryhit == 0){
+      this.stalls_memoryAccess = CACHE_STALLS;
+    }
+    let row = new Array(5);
+    for(let i = 0; i<5; i++){
+      if(this.pc[i] == -1) row[i] = 0;
+      else row[i] = this.pc[i] + 1;
+    }
+    CYCLE = this.CYCLE;
+    this.CYCLE++;
+    updateStats();
+    // console.log(this.pc);
+    timelineAppendRow(this.CYCLE, row);
+    if (this.CYCLE > 10000) {
+      wrong_code = true;
+      alert("Infinite loop");
+      location.reload();
+    }
+  }
+
+
+
+  fetch() {
+    if (!this.DONE && this.PC < instList.length){
+      this.INSTRUCTION = instList[this.PC].split(" ")[1];
+    }  
+    let hit = 1;
+    hit *= this.instruction_cache.readcache(this.PC-this.PC%(icache_block/4))==='miss'?0:1;
+    this.instruction_cache.insert(this.PC-this.PC%(icache_block/4));
+    // console.error(hit)
+    this.fetchhit = hit;
+    if(this.stalls_fetch==0 || this.fetchhit!=0)
+    {
+      let type = document.getElementsByClassName("dropbtn")[0].innerText;
+      let numberFormat = "hex";
+      if (type === "Unsigned Decimal") numberFormat = "udec";
+      if (type === "Decimal") numberFormat = "dec";
+      this.instruction_cache.cache_sync('icache', numberFormat);
+
+    } 
+    if(knobs.pipeline_info_knob)
+    console.log(this.INSTRUCTION);
+      this.PC += 1;
+      // console.log("fetch");
+      // console.log(this.PC);
+    
+    if(hit==1)
+      icache_hit++;
+    else
+      icache_miss++;
+  }    
+  decode() {
+    let obj = decode2(instList[this.pc[1]].split(" ")[1]);
+    if(knobs.pipeline_info_knob)
+    console.log(obj);
+    this.IMM[this.pc[1]] = obj.imm;
+    this.OP[this.pc[1]]= obj.op;
+    this.RS1[this.pc[1]] = obj.rs1;
+    this.RS2[this.pc[1]] = obj.rs2;
+    this.RD[this.pc[1]] = obj.rd;
+  }  
+  execute() {
+    let rs1 = Math.round(this.RF[Math.round(this.RS1[this.pc[2]])]);
+
+    let rs2 = Math.round(this.RF[Math.round(this.RS2[this.pc[2]])]);
+    if(knobs.data_knob  && dependency(this.pc[2], this.pc[3], -1, -1)   &&    (!forwardingDepencency(this.pc[2], this.pc[4]))){
+      // console.log("HDFHUEDFHUIHSDGIHDSIPHF\n");
+      if(dependency(this.pc[2], this.pc[3], -1, -1) == 1) rs1 = this.ALURESULT[this.pc[3]]
+      else {
