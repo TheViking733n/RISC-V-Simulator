@@ -1298,3 +1298,109 @@ box-shadow:
   0px 1px 10px 0px hsla(0,0%,0%,0.12), 
   0px 2px 4px -1px hsla(0,0%,0%,0.2);
 }
+
+.dp06 {
+background-color: hsla(0, 100%, 100%, 0.11);	
+box-shadow:
+  /* offset-x | offset-y | blur-radius | spread-radius | color */
+  0px 6px 10px 0px hsla(0,0%,0%,0.14), 
+  0px 1px 18px 0px hsla(0,0%,0%,0.12), 
+  0px 3px 5px -1px hsla(0,0%,0%,0.2);
+}
+
+.dp08 {
+background-color: hsla(0, 100%, 100%, 0.12);	
+box-shadow:
+  /* offset-x | offset-y | blur-radius | spread-radius | color */
+  0px 8px 10px 1px hsla(0,0%,0%,0.14), 
+  0px 3px 14px 2px hsla(0,0%,0%,0.12), 
+  0px 5px 5px -3px hsla(0,0%,0%,0.2);
+}
+
+.dp12 {
+background-color: hsla(0, 100%, 100%, 0.14);	
+box-shadow:
+  /* offset-x | offset-y | blur-radius | spread-radius | color */
+  0px 12px 17px 2px hsla(0,0%,0%,0.14), 
+  0px 5px 22px 4px hsla(0,0%,0%,0.12), 
+  0px 7px 8px -4px hsla(0,0%,0%,0.2);
+}
+
+.dp16 {
+background-color: hsla(0, 100%, 100%, 0.15);	
+box-shadow:
+  /* offset-x | offset-y | blur-radius | spread-radius | color */
+  0px 16px 24px 2px hsla(0,0%,0%,0.14), 
+  0px 6px 30px 5px hsla(0,0%,0%,0.12), 
+  0px 8px 10px -5px hsla(0,0%,0%,0.2);
+}
+
+.dp24 {
+/* background-color: hsla(0, 100%, 100%, 0.16);	 */
+box-shadow:
+  /* offset-x | offset-y | blur-radius | spread-radius | color */
+  0px 24px 38px 3px hsla(0,0%,0%,0.14), 
+  0px 9px 46px 8px hsla(0,0%,0%,0.12), 
+  0px 11px 15px -7px hsla(0,0%,0%,0.2);
+}
+
+
+
+/*The text segment load swtich*/
+/* .toggle-switch {
+cursor: pointer;
+position: relative;
+width: 50px;
+height: 30px;
+border-radius: 25px;
+outline: none;
+background-color: #ccc;
+-webkit-appearance: none;
+transition: background .3s rgba(0,0,0,0.15);
+}
+.toggle-switch::after {
+content: '';
+position: absolute;
+top: 50%;
+left: 30%;
+transform: translate(-50%, -50%);
+border-radius: 50%;
+height: 1.25rem;
+width: 1.25rem;
+background-color: White;
+transition: left .3s;
+}
+
+.toggle-switch:checked {
+background-color: rgb(141, 221, 141);
+}
+
+.toggle-switch:checked::after {
+left: 70%;
+}
+
+.text-segment-load-wrapper{
+margin-left: 23px;
+display: flex;
+justify-content: top;
+align-items: center;
+flex-direction: column;
+}
+
+.toggle-switch{
+display: inline;
+} */
+
+/* .text-segment-load-text{
+margin: 50px;
+width: 25%;
+height: 100%;
+} */
+
+
+
+
+/* 
+input {
+transform: scale(5)
+} */
