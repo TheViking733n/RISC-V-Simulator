@@ -1199,3 +1199,102 @@ color: var(--textColorDark);
 box-sizing: border-box;
 transition: all 0.12s cubic-bezier(0.42, 0.54, 0.22, 1.26);
 }
+
+#thefile{
+width: 0.1px;
+height: 0.1px;
+opacity: 0;
+overflow: hidden;
+position: absolute;
+z-index: 1;
+}
+
+label.file{
+/* display: inline-block; */
+/* transform: translate3d(-50%, -50%, 0); */
+/* padding: .7rem 1.5rem; */
+/* height: 60%; */
+/* width: 60%; */
+display: flex;
+align-items: center;
+justify-content: center;
+border-radius: 4px;
+background: var(--paperColor);
+color: white;
+font-size: 1.25em;
+font-weight: 700;
+/* padding-left: 1rem;
+padding-right: 2rem; */
+box-shadow: 0 20px 60px var(--shadowColorFaint);
+cursor: pointer;
+}
+
+label.file:hover{
+  background: var(--paperColorDark);
+  transform: translate3d(0%, -5%, 0);
+}
+
+label.file:active{
+  background: var(--paperColorDark);
+  transform: translate3d(0%, 5%, 0);
+}
+
+label.file.normal{
+transform: translate3d(10%, 50%, 0);
+/* padding: 0.2rem 2rem; */
+font-size: 1rem;
+top: 0;
+left: 0;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* Shadows for dark theme */
+
+.dp01 {
+background-color: hsla(0, 100%, 100%, 0.05);
+box-shadow:
+  /* offset-x | offset-y | blur-radius | spread-radius | color */
+  0px 1px 1px 0px hsla(0,0%,0%,0.14), 
+  0px 2px 1px -1px hsla(0,0%,0%,0.12), 
+  0px 1px 3px 0px hsla(0,0%,0%,0.2);
+}
+
+.dp02 {
+background-color: hsla(0, 100%, 100%, 0.07);
+box-shadow:
+/* offset-x | offset-y | blur-radius | spread-radius | color */
+0px 2px 2px 0px hsla(0,0%,0%,0.14), 
+0px 3px 1px -2px hsla(0,0%,0%,0.12), 
+0px 1px 5px 0px hsla(0,0%,0%,0.2);
+}
+
+.dp03 {
+background-color: hsla(0, 100%, 100%, 0.08);
+box-shadow:
+  /* offset-x | offset-y | blur-radius | spread-radius | color */
+  0px 3px 4px 0px hsla(0,0%,0%,0.14), 
+  0px 3px 3px -2px hsla(0,0%,0%,0.12), 
+  0px 1px 8px 0px hsla(0,0%,0%,0.2);
+}
+
+.dp04 {
+background-color: hsla(0, 100%, 100%, 0.09);	
+box-shadow:
+  /* offset-x | offset-y | blur-radius | spread-radius | color */
+  0px 4px 5px 0px hsla(0,0%,0%,0.14), 
+  0px 1px 10px 0px hsla(0,0%,0%,0.12), 
+  0px 2px 4px -1px hsla(0,0%,0%,0.2);
+}
