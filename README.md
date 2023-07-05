@@ -4,7 +4,7 @@
 > Simple web based Functional Simulator for RISC-V ISA. This project was done as a part of the course project for CS204 Computer Architecture at IIT Ropar. Here is the [link](https://theviking733n.github.io/RISC-V-Simulator/) to the simulator.
 
 ## CS204 Computer Architecture Course Project
-* Instructor: [Dr. T.V. Kalyan](https://iitrpr.irins.org/profile/105196)
+* Instructor: [Dr. Neeraj Goel](https://www.linkedin.com/in/neerajgoel/) and [Dr. T.V. Kalyan](https://iitrpr.irins.org/profile/105196)
 
 ## Team Members
 * [Anant Prakash Singh](https://github.com/TheViking733n)
