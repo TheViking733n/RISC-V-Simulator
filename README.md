@@ -20,3 +20,8 @@ Just clone the repo and open the `index.html` file in any browser. The simulator
 ![home-2](https://github.com/TheViking733n/RISC-V-Simulator/assets/69471106/e5a565cb-5e87-4102-9e47-00dda3611a33)
 
 ![home-3](https://github.com/TheViking733n/RISC-V-Simulator/assets/69471106/52b1bfd9-460d-445c-a84e-a0fae32af1c0)
+
+
+## [License](/LICENSE)
+
+For open-source projects, Under [MIT License](/LICENSE).
